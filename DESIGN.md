@@ -161,7 +161,7 @@ Usage: `bg-surface text-fg border-line rounded-lg shadow-md font-mono text-accen
 ### Notes
 - Content lives in `src/data/cv.ts`; every `TODO:` string renders as an amber TODO tag.
 - `og:image` is still TODO (1200×630 PNG at `/og.png`).
-- Name: GitHub profile says "Ivan Tugay"; the site uses "Ivan Tuhai" per brief — confirm.
+- Name: English spelling is "Ivan Tuhai" (confirmed by Ivan). The LinkedIn URL slug is kept as-is.
 
 ## 5. Content sources
 - `gh api users/listepo` (name, hireable, created 2012, X handle, public repo count), `gh api users/listepo/repos`, `gh repo list pyrlyn`, `gh api orgs/pyrlyn`.

@@ -10,10 +10,10 @@ export const site = {
 };
 
 export const person = {
-  // GitHub profile spells the name "Ivan Tugay"; the brief uses "Ivan Tuhai".
+  // English spelling confirmed by Ivan: "Tuhai".
   name: 'Ivan Tuhai',
   handle: 'listepo',
-  role: 'engineer', // listepo/listepo profile README: "Ivan Tugay · engineer"
+  role: 'engineer', // listepo/listepo profile README: "· engineer"
   githubSince: 2012, // gh api users/listepo → created_at 2012-10-08
   hireable: true, // gh api users/listepo → hireable: true
   // Motto from the listepo/listepo profile README, translated to Russian.
@@ -31,7 +31,7 @@ export const links = [
   {
     id: 'linkedin',
     label: 'LinkedIn',
-    value: 'in/ivan-tugay-68101474',
+    value: 'Ivan Tuhai',
     href: 'https://www.linkedin.com/in/ivan-tugay-68101474/',
   },
 ] as const;
