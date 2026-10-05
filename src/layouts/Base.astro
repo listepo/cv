@@ -11,8 +11,11 @@ const jsonLd = {
   name: person.name,
   alternateName: person.handle,
   url: site.url,
-  jobTitle: 'Engineer',
-  sameAs: ['https://github.com/listepo', 'https://x.com/listepo', 'https://www.linkedin.com/in/ivan-tugay-68101474/'],
+  jobTitle: 'CTO',
+  worksFor: { '@type': 'Organization', name: 'Pyrlyn', url: 'https://github.com/pyrlyn' },
+  email: 'mailto:listepo@gmail.com',
+  address: { '@type': 'PostalAddress', addressCountry: 'UA' },
+  sameAs: ['https://github.com/listepo', 'https://x.com/listepo', 'https://www.linkedin.com/in/listepo'],
 };
 ---
 <!doctype html>
