@@ -10,7 +10,7 @@ Run: `npm i && npm run dev` (http://localhost:4321/cv/) · `npm run build` → `
 ## 0. Identity
 
 A personal identity, deliberately **distinct from the Pyrlyn brand** (Pyrlyn = blue `#4c8dff` / mint `#5ee3a1` / teal `#3ee6c4`, IBM Plex Mono + JetBrains Mono, glass pill nav, `>_` mark).
-The CV uses **warm off-white on warm near-black with one signal colour — lime `#c8f031`**, Geist Mono for display, a flat hairline top bar, sharp editor-pane cards, a block-cursor wordmark (`ivan tuhai▌`), a rotating graph cube in the hero and Matrix-style digital rain in the background. Pyrlyn products appear only as projects, in the CV's own style.
+The CV uses **warm off-white on warm near-black with one signal colour — lime `#c8f031`**, Geist Mono for display, a flat hairline top bar, sharp editor-pane cards, a block-cursor wordmark (`ivan tuhai▌`), one big rotating 3D network graph in the hero and Matrix-style digital rain in the background. Pyrlyn products appear only as projects, in the CV's own style.
 
 ## 1. Section structure
 
@@ -19,14 +19,14 @@ No skills, stack or languages lists anywhere (per Ivan). Order follows a resume:
 | # | id | Prompt header | Content |
 |---|---|---|---|
 | — | top bar | `ivan tuhai▌` | Sticky flat bar (94% opaque bg, 1px bottom hairline). Numbered mono links `01 about · 02 experience · 03 projects · 04 contact`; lime underline on hover/active. Mobile: only `04 contact`. |
-| 1 | `#top` hero | `~/ivan ❯ whoami` | Name (h1, glitch target), `@listepo / founder & CTO of Pyrlyn`, lime "open to offers" tag, motto, primary + outline CTA. Stage: dark radial scrim, lazy OGL graph cube with electrostatic hover (CSS-3D cube fallback), floating frosted `zsh ~/projects` pane. |
+| 1 | `#top` hero | `~/ivan ❯ whoami` | Name (h1, glitch target), `@listepo / founder & CTO of Pyrlyn`, lime "open to offers" tag, motto, primary + outline CTA (both glitch targets). Stage: dark radial scrim, lazy OGL 3D node-link graph with electrostatic hover (static SVG graph fallback), floating frosted `zsh ~/projects` pane. |
 | 2 | `#about` | `01 ~/ivan ❯ cat about.md` | 3 paragraphs (career arc, tech-lead track, current roles) + `profile.toml` pane: role, location (country only), dev_since, handle, open_to_work. |
 | 3 | `#experience` | `02 … git log --author=ivan --oneline` | One pane as a git-log: hash · title @ org · impact bullets · period · city. 8 detailed roles (Pyrlyn → 111PIX UA) + compact "Earlier · 2009 — 2015" table (6 roles). |
 | 4 | `#projects` | `03 … ls -la ~/projects` | 4 featured tilt panes (ketch, rtok, runa, cox) + `ls -la` pane of other repos (no language column). |
 | 5 | `#contact` | `04 … cat contacts` | One pane, 2-column rows: email (mailto), linkedin, github, x. |
 | — | footer | `listepo.github.io/cv▌` | © year Ivan Tuhai, `cd ~ ↑`. |
 
-Heading semantics: one `h1`, `h2` per section, `h3` per project/job. Glitch targets: h1 + every h2 (`data-glitch`).
+Heading semantics: one `h1`, `h2` per section, `h3` per project/job. Glitch targets: h1 + every h2 + the two hero CTA labels (`data-glitch`).
 
 ## 2. Visual system tokens
 
@@ -84,45 +84,69 @@ Rules: lime is the only hue; everything else is warm neutral. No mint, amber, cy
 | `--ring-accent` | 1px lime ring (reserved) |
 | Frost (hero pane only) | `rgb(20 19 17 / .72)` + blur 12px; opaque `#141311` under `prefers-reduced-transparency` or no `backdrop-filter` |
 
-### 2a. Hero graph cube & electrostatic hover
+### 2a. Hero network graph & electrostatic hover
 
-**Library:** OGL only (already a dependency; no Three.js). Files: `src/scripts/hero3d.ts` (cube, ray picking, loop), `src/scripts/graph-faces.ts` (2D atlas + physics), `src/scripts/cube-config.ts` (all tuning).
+**Library:** OGL only (already a dependency; no Three.js). Files: `src/scripts/hero3d.ts` (OGL meshes, pointer → charge, loop), `src/scripts/network-sim.ts` (graph data, force layout, living-data mutation, pull physics), `src/scripts/graph-config.ts` (all tuning, `GRAPH_CONFIG`).
 
 **How it's built**
-1. A 2D canvas atlas (3×2 cells, 512 px per face; 384 px on stages < 480 px) holds six faces. Each face gets `graphsPerFace.min…max` (2–4) small graphs in a 2-row / 1+2 / 2×2 layout, mixing line, bar, scatter, area and node-graph types. Colours: warm white strokes on `--surface`, one lime highlight per graph.
-2. Data morphs smoothly: every `dataChangeInterval` ms about a third of the graphs get new random-walk targets, and values ease toward them by `morphRate` each frame, so nothing jumps.
-3. Every graph *element* (line vertex, bar top, scatter dot, graph node) is a particle with rest position (from data), displacement and velocity.
-4. **Pull:** on hover, the cursor is ray-cast into the cube (slab test in cube-local space) to get the face-local hit point; that face's charge sits there, the other faces use their centre. Each element gets `F = min(maxForce, chargeStrength / max(d, minDistance)^falloff)` toward the charge (`falloff = 2` → inverse-square). Displacement is clamped to `maxDisplacement × faceSize`.
-5. **Cling + sparks:** element pairs on a face closer than `snapDistance` attract each other (`snapStrength`, fading with distance) and draw a lime spark line with a little jitter at its midpoint (up to `maxSparksPerFace`).
-6. **Relax:** a spring (`springStiffness`) always pulls elements back to rest and velocity is multiplied by `springDamping` each frame, so when the pointer leaves they settle back with a damped wobble.
-7. The atlas is uploaded as an OGL `Texture` (no mipmaps, clamp) at ≤ `textureFps`; the cube itself renders every frame with a soft key light and 1px lime face edges.
-8. Touch: a tap toggles the pull on/off (charge = tap hit point). Reduced motion: no rotation, no data changes, no pull — one static frame.
+1. One node-link graph fills the stage (about the old cube's footprint): **120 nodes on desktop, 64 on mobile (viewport < 768 px)** (`nodeCount` / `nodeCountSmall`), ≈ `edgeDensity` × nodes edges, built by preferential attachment so a few hubs emerge. Warm white nodes (round point sprites, sized by degree) and edges (alpha by weight); the top `hubShare` of nodes by degree are lime.
+2. Layout is a light 3D force simulation (repulsion, springs on edges, centering, damping) inside a sphere of `layoutRadius`; the whole graph rotates slowly (`rotationSpeed`) with a slight tilt.
+3. **Living data:** every `changeInterval` ms `edgesPerChange` edges fade out and as many new ones fade in (`fadeRate`), and every `nodeSwapEvery` changes one leaf node dissolves and is re-born elsewhere, so the node count stays constant while the topology morphs. Weights, hub status and node sizes ease toward their new values (`sizeMorphRate`) and the layout re-settles, so nothing jumps.
+4. **Pull:** the pointer ray is intersected with the stage plane and converted to graph-local space (inverse world matrix) → the charge. Each node has a displacement layer on top of its layout position and gets `F = min(maxForce, chargeStrength / max(d, minDistance)^falloff)` toward the charge (`falloff = 2` → inverse-square). Displacement is clamped to `maxDisplacement`.
+5. **Cling + sparks:** pulled nodes closer than `snapDistance` attract each other (`snapStrength`, fading with distance) and draw lime spark lines (up to `maxSparks`); a small lime marker shows the charge.
+6. **Relax:** a spring (`springStiffness`) always pulls the displacement back to zero and velocity is multiplied by `springDamping` each frame, so on leave the nodes settle back with a damped wobble.
+7. Rendering: one `gl.POINTS` mesh + one `gl.LINES` mesh with fixed-capacity dynamic buffers (`setDrawRange`, additive-free alpha blending), DPR ≤ 2.
+8. Touch: a tap toggles the pull on/off (charge = tap point). Reduced motion: no rotation, no data changes, no pull — one static frame. No WebGL: static seeded SVG graph in `Hero.astro`.
 
-**Tuning (`CUBE_CONFIG`)**
+**Tuning (`GRAPH_CONFIG`)**
 | Key | Default | Effect |
 |---|---|---|
-| `graphsPerFace` | `{ min: 2, max: 4 }` | Graphs per face |
-| `rotationSpeed` | `0.16` rad/s | Cube spin |
-| `dataChangeInterval` / `morphRate` | `2800` ms / `0.035` | How often data changes / how fast it morphs |
-| `chargeStrength` | `5200` | Pull strength (higher = stronger) |
+| `nodeCount` / `nodeCountSmall` | `120` / `64` | Nodes on desktop / on mobile (viewport < 768 px) |
+| `edgeDensity` / `hubShare` | `1.5` / `0.06` | Edges per node / share of nodes drawn as lime hubs |
+| `layoutRadius`, `repulsion`, `linkLength`, `linkStrength`, `centering`, `layoutDamping` | `1.25`, `0.0016`, `0.32`, `0.018`, `0.0025`, `0.86` | Force layout shape and calmness |
+| `rotationSpeed` | `0.12` rad/s | Graph spin |
+| `changeInterval` / `edgesPerChange` / `nodeSwapEvery` | `1600` ms / `3` / `3` | How often and how much the topology changes |
+| `fadeRate` / `sizeMorphRate` | `0.025` / `0.03` | How fast edges/nodes fade and sizes morph |
+| `chargeStrength` | `0.0045` | Pull strength (higher = stronger) |
 | `falloff` | `2` | Distance exponent (2 = inverse-square; 1 = softer, longer reach) |
-| `minDistance` / `maxForce` | `18` px / `2.4` | Force floor distance / per-frame clamp (stops "explosions") |
-| `maxDisplacement` | `0.2` | Max travel from rest, as a fraction of the face |
-| `snapDistance` / `snapStrength` | `26` px / `0.06` | Cling radius and pull between neighbours; sparks appear inside this radius |
-| `springStiffness` / `springDamping` | `0.06` / `0.84` | Return force / velocity retention (lower damping value = calmer settle) |
-| `faceSize` / `faceSizeSmall` / `textureFps` | `512` / `384` / `30` | Texture resolution and redraw cap |
+| `minDistance` / `maxForce` | `0.12` / `0.018` | Force floor distance / per-frame clamp (stops "explosions") |
+| `maxDisplacement` | `0.55` | Max travel from the layout position (world units) |
+| `snapDistance` / `snapStrength` / `maxSparks` | `0.2` / `0.08` / `90` | Cling radius, pull between neighbours, spark cap |
+| `springStiffness` / `springDamping` | `0.05` / `0.84` | Return force / velocity retention (lower damping value = calmer settle) |
 
-For a subtler effect lower `chargeStrength` or raise `falloff`; for more sparks raise `snapDistance`. Review hook: `window.__cvCube.pull(true)`.
+For a subtler effect lower `chargeStrength` or raise `falloff`; for more sparks raise `snapDistance`. Review hook: `window.__cvGraph.pull(true)` / `window.__cvGraph.count()`.
 
 ### Motion
 `--ease-out cubic-bezier(.22,1,.36,1)`; `--dur-fast 150` · `--dur-base 300` · `--dur-slow 600` ms.
-- **Hero graph cube** (OGL): see §2a. Rotation 0.16 rad/s, textures redrawn at ≤ 30 fps, DPR ≤ 2, paused offscreen / hidden tab, static cube + static graphs under reduced motion. Chunk ≈ 19 KB gzip, dynamic `import()` on idle.
-- **Digital rain** (`#rain`, 2D canvas, fixed, `pointer-events: none`, `aria-hidden`): code snippets (`fn main()`, `Ok(())`, `=> {}`, `#[derive]`…) mixed with half-width katakana, digits and symbols; lime only. ~30 fps cap, DPR-aware, ≤ 64 columns desktop / ≤ 14 mobile, transparent trails via `destination-out`. Opacity .5 with a horizontal mask (edges 100% → reading column 14%); mobile .18 without mask. Paused when the tab is hidden; reduced motion = one pre-simulated static frame. Hero stage adds a dark radial scrim so the rain recedes behind the cube.
-- **Glitch** (`[data-glitch]`: h1 + h2s): every 4–9 s one visible heading at random; 4 frames over ~260 ms (scramble 55% → 5%, `clip-path` slice jitter ±3px, RGB split via `text-shadow` red/lime). ≤ 1 event per 4 s — far under the 3 flashes/s limit. Scramble lives in an `aria-hidden` overlay; the real text node never changes. Disabled entirely under reduced motion.
+- **Hero network graph** (OGL): see §2a. Rotation 0.12 rad/s, topology change every 1.6 s with fades, DPR ≤ 2, paused offscreen / hidden tab, static frame under reduced motion. Chunk ≈ 18 KB gzip, dynamic `import()` on idle.
+- **Digital rain** (`#rain`, 2D canvas, fixed, `pointer-events: none`, `aria-hidden`): code snippets (`fn main()`, `Ok(())`, `=> {}`, `#[derive]`…) mixed with half-width katakana, digits and symbols; lime only. ~30 fps cap, DPR-aware, ≤ 64 columns desktop / ≤ 14 mobile, transparent trails via `destination-out`. Opacity .5 with a horizontal mask (edges 100% → reading column 14%); mobile .18 without mask. Paused when the tab is hidden; reduced motion = one pre-simulated static frame. Hero stage adds a dark radial scrim so the rain recedes behind the graph.
+- **Glitch** (`[data-glitch]`: h1 + h2s + the hero CTA labels "View projects" / "github.com/listepo"): every 4–9 s one visible target at random (never two at once); 4 frames over ~260 ms (scramble 55% → 5%, `clip-path` slice jitter ±3px, RGB split via `text-shadow` red/lime). ≤ 1 event per 4 s — far under the 3 flashes/s limit. Scramble lives in an `aria-hidden` overlay; the real text node never changes. On buttons the overlay is `pointer-events: none`, absolutely positioned over an `inline-block` label and painted in the button's own surface colour (lime on primary), so clicks, focus and layout are unaffected. Disabled entirely under reduced motion.
 - Panes: perspective(1000px) tilt ≤ 3°, lime rail grows on the left edge, shadow → lg.
 - Hero frosted pane floats ±8px / 9 s; parallax depth 12/30 px (fine pointers only).
-- Sections: CSS `animation-timeline: view()` reveal (progressive).
-- `prefers-reduced-motion`: all CSS animation/transition ≈ 0; no tilt, parallax, glitch; cube + graphs + rain static, no hover pull.
+- **Load sequence** (pure CSS, once per page load, `animation-fill-mode: backwards` so nothing lingers):
+  1. Nav wordmark `ivan tuhai▌` types itself: `clip-path` reveal in `steps(10)` over 600 ms (60 ms/char, 100 ms delay) while the lime block cursor steps along with it, then the cursor blinks at 1 s `steps(1)`. The full text is in the DOM and in layout from the start (screen readers get it at once, width reserved, no layout shift).
+  2. Hero, from 650 ms: prompt line (its `whoami` types in 45 ms/char) → name → role → motto → buttons → graph, 60–80 ms apart, each a 450 ms fade with a 12 px rise (the graph fades in from `scale .96`). The sequence finishes at ≈ 1.5 s after load (≈ 0.9 s of its own).
+- **Scroll reveals** (`main.ts`, IntersectionObserver, `rootMargin -8%` bottom, each element once): JS marks every section `[data-reveal]` (600 ms fade + 14 px rise) and the about paragraphs, profile rows, experience rows, project cards, repo rows and contact rows `[data-stagger]` (children 500 ms fade + 10 px rise, 70 ms apart, capped at 8). Section prompts (`cat about.md`, `git log …`) type in like the wordmark (`steps(var(--n))`, 40 ms/char). Progressive enhancement: the hidden state only exists under `html.motion`, which JS adds after marking, so without JS (or under reduced motion) everything is simply visible. Only `opacity` + `translate` animate (plus the `clip-path` typing), so there is no layout shift and the tilt `transform` on cards is untouched.
+- **Scroll depth:** the hero graph drifts down at 0.14× scroll and fades out once its top quarter passes under the top bar; the rain canvas (48 px taller than the viewport) shifts up to 48 px at 0.03× scroll. rAF-throttled, passive listeners.
+- **Scroll progress:** 2 px lime hairline on the bottom edge of the top bar, `transform: scaleX(progress)` (decorative, `aria-hidden`; hidden without JS).
+- `prefers-reduced-motion`: all CSS animation/transition ≈ 0; no load sequence, wordmark typing, cursor blink, scroll reveals, prompt typing, scroll parallax, tilt, glitch or sound-toggle bounce — everything is shown instantly; hero graph + rain static, no hover pull. The progress bar still tracks scroll position (no animation).
+
+### Sound
+A quiet hover tick on buttons and button-like links (`.btn`, nav links, wordmark, contact rows, the toggle itself), synthesised with the Web Audio API (no audio file). Files: `src/scripts/sound.ts`, `src/scripts/sound-config.ts` (`SOUND_CONFIG`).
+- **Off by default.** The speaker toggle in the nav (40 × 40 px hit area, `aria-pressed`, `aria-label` "Enable sound" / "Mute sound", lime focus ring, lime icon when on) turns it on; that click creates/resumes the `AudioContext` (browser autoplay rules) and plays one confirmation tick.
+- While off, the toggle's icon does a small real-looking bounce (4 px hop + 1.5 px rebound, ease-out up / ease-in down) every 3.5 s; it stops once sound is on and never runs under reduced motion.
+- The choice is saved in `localStorage` (`cv:hover-sound` = `on`/`off`). A returning visitor with sound on sees the toggle on (no bounce) and audio is unlocked on their first pointerdown/keydown; hovering before that is silent.
+- Mouse pointers only (no touch/pen; the toggle is shown on `(hover: hover) and (pointer: fine)` devices only), throttled to one tick per 80 ms, re-entering the same control doesn't retrigger.
+
+| Key | Default | Effect |
+|---|---|---|
+| `gain` | `0.04` | Peak volume |
+| `freqMin` / `freqMax` | `1300` / `1900` Hz | Random pitch per tick (avoids repetition fatigue) |
+| `glide` | `0.82` | End pitch as a fraction of the start (soft downward tick) |
+| `duration` / `attack` | `0.045` s / `0.003` s | Length and attack; exponential decay after the attack |
+| `wave` | `triangle` | Oscillator type |
+| `throttleMs` | `80` | Minimum gap between ticks |
+| `selector` | buttons + button-like links | What ticks on hover |
 
 ## 3. Component inventory
 
@@ -143,7 +167,7 @@ For a subtler effect lower `chargeStrength` or raise `falloff`; for more sparks 
 | Contact row | 60px, key subtle, value mono; email row uses `mailto:` and `→`, others open a new tab with `↗` | lime-soft bg, arrow lime + nudge | inset lime outline | — |
 | TODO tag | dashed lime border, diagonal lime stripes, fg text | — | — | — |
 | Frosted hero pane | frost + shadow-lg, `zsh` tab, `pre` listing, blinking block cursor | — | — | opaque under reduced transparency |
-| Hero graph cube | OGL cube, 6 faces × 2–4 live graphs, lime edges, `aria-hidden` | mouse: electrostatic pull toward the cursor hit point, cling + sparks; leave: spring back. Touch: tap toggles the pull | — | No WebGL → CSS-3D cube with static SVG graphs; reduced motion → static frame, pull disabled |
+| Hero network graph | OGL 3D node-link graph, 120 nodes (64 on mobile), warm white nodes/edges, lime hubs, `aria-hidden` | mouse: electrostatic pull toward the cursor, cling + lime sparks; leave: spring back. Touch: tap toggles the pull | — | No WebGL → static seeded SVG graph; reduced motion → static frame, pull disabled |
 | Digital rain | fixed canvas behind content | — | — | reduced motion → static; forced colours → hidden |
 | Glitch overlay | hidden | — | — | reduced motion → never runs |
 | Skip link | off-screen | — | visible, lime fill | — |

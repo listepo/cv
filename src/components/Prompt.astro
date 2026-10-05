@@ -2,6 +2,6 @@
 interface Props { cmd: string; path?: string; num?: string }
 const { cmd, path = '~/ivan', num } = Astro.props;
 ---
-<p class="prompt">
+<p class="prompt" style={`--n:${cmd.length}`}>
   {num && <span class="prompt__num">{num}</span>}<span class="prompt__path">{path}</span><span class="prompt__sigil" aria-hidden="true">❯</span><span class="prompt__cmd">{cmd}</span>
 </p>

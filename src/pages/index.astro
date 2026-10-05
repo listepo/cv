@@ -21,7 +21,7 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
     <Hero />
 
     <!-- about -->
-    <section id="about" class="section container-x reveal" aria-labelledby="about-title">
+    <section id="about" class="section container-x" aria-labelledby="about-title">
       <div class="section-head">
         <Prompt num="01" cmd="cat about.md" />
         <h2 id="about-title" class="section-title" data-glitch>About</h2>
@@ -47,7 +47,7 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
     </section>
 
     <!-- experience -->
-    <section id="experience" class="section container-x reveal" aria-labelledby="exp-title">
+    <section id="experience" class="section container-x" aria-labelledby="exp-title">
       <div class="section-head">
         <Prompt num="02" cmd="git log --author=ivan --oneline" />
         <h2 id="exp-title" class="section-title" data-glitch>Experience</h2>
@@ -80,7 +80,7 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
     </section>
 
     <!-- projects -->
-    <section id="projects" class="section container-x reveal" aria-labelledby="projects-title">
+    <section id="projects" class="section container-x" aria-labelledby="projects-title">
       <div class="section-head">
         <Prompt num="03" cmd="ls -la ~/projects" />
         <h2 id="projects-title" class="section-title" data-glitch>Projects</h2>
@@ -126,7 +126,7 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
     </section>
 
     <!-- contact -->
-    <section id="contact" class="section container-x reveal" aria-labelledby="contact-title">
+    <section id="contact" class="section container-x" aria-labelledby="contact-title">
       <div class="section-head">
         <Prompt num="04" cmd="cat contacts" />
         <h2 id="contact-title" class="section-title" data-glitch>Contact</h2>

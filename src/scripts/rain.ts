@@ -34,7 +34,7 @@ export function mountRain(canvas: HTMLCanvasElement, opts: { reduceMotion: Media
   const layout = () => {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     w = window.innerWidth;
-    h = window.innerHeight;
+    h = window.innerHeight + 48; // canvas is 48px taller than the viewport for the scroll parallax
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);

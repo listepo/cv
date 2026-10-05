@@ -2,16 +2,18 @@
 import Prompt from './Prompt.astro';
 import { person, projects } from '../data/cv';
 const products = projects.slice(0, 5).map((p) => p.name);
-// static graphs for the CSS-3D fallback cube (shown when WebGL is unavailable)
-const pts = (ys: number[]) => ys.map((y, i) => `${6 + (i * 88) / (ys.length - 1)},${y}`).join(' ');
-const faces = [
-  { side: 'f', kind: 'line', points: pts([70, 52, 60, 34, 46, 28, 40, 22]), bars: [], dots: [] },
-  { side: 'r', kind: 'bar', points: '', bars: [30, 52, 40, 64, 76, 48, 58, 36], dots: [] },
-  { side: 't', kind: 'scatter', points: '', bars: [], dots: [[14, 70], [26, 48], [34, 62], [46, 30], [52, 54], [64, 40], [72, 22], [84, 46], [40, 80], [78, 66]] },
-  { side: 'b', kind: 'area', points: pts([66, 58, 70, 44, 50, 36, 42, 30]), bars: [], dots: [] },
-  { side: 'l', kind: 'area', points: pts([50, 40, 58, 46, 30, 38, 24, 32]), bars: [], dots: [] },
-  { side: 'd', kind: 'line', points: pts([40, 60, 34, 56, 44, 70, 52, 38]), bars: [], dots: [] },
-];
+// Static SVG fallback graph (no WebGL): seeded so every build renders the same picture.
+let seed = 7;
+const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+const fbNodes = Array.from({ length: 64 }, (_, i) => {
+  const r = 82 * Math.sqrt(rand()), a = rand() * Math.PI * 2;
+  return { x: +(Math.cos(a) * r).toFixed(1), y: +(Math.sin(a) * r).toFixed(1), hub: i % 16 === 0 };
+});
+const fbEdges: Array<[number, number]> = [];
+fbNodes.forEach((n, i) => {
+  const near = fbNodes.map((m, j) => [j, (m.x - n.x) ** 2 + (m.y - n.y) ** 2] as const).filter(([j]) => j !== i).sort((p, q) => p[1] - q[1]);
+  for (const [j] of near.slice(0, 2)) if (i < j) fbEdges.push([i, j]);
+});
 ---
 <section id="top" class="hero container-x" aria-labelledby="hero-title">
   <div class="hero__copy">
@@ -26,27 +28,17 @@ const faces = [
       <span class="text-fg">{person.motto[1]}</span>
     </p>
     <div class="hero__cta">
-      <a class="btn btn--primary" href="#projects">View projects <span aria-hidden="true">↓</span></a>
-      <a class="btn btn--outline" href="https://github.com/listepo" rel="me noopener" target="_blank">github.com/listepo<span class="sr-only"> (opens in a new tab)</span></a>
+      <a class="btn btn--primary" href="#projects"><span class="btn__label" data-glitch>View projects</span> <span aria-hidden="true">↓</span></a>
+      <a class="btn btn--outline" href="https://github.com/listepo" rel="me noopener" target="_blank"><span class="btn__label" data-glitch>github.com/listepo</span><span class="sr-only"> (opens in a new tab)</span></a>
     </div>
   </div>
 
   <div class="hero__stage" aria-hidden="true">
     <div class="hero__3d" id="hero-3d" data-depth="12">
-      <div class="cube-fallback">
-        <div class="cube">
-          {faces.map((f) => (
-            <div class={`cube__face cube__face--${f.side}`}>
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-                {f.kind === 'line' && <polyline points={f.points} fill="none" stroke="#ece7df" stroke-width="1.6" stroke-linejoin="round" />}
-                {f.kind === 'area' && <><polygon points={`6,92 ${f.points} 94,92`} fill="rgb(200 240 49 / .22)" /><polyline points={f.points} fill="none" stroke="#c8f031" stroke-width="1.6" /></>}
-                {f.kind === 'bar' && f.bars.map((b, i) => <rect x={8 + i * 11} y={92 - b} width="6" height={b} fill={i === 4 ? '#c8f031' : 'rgb(236 231 223 / .5)'} />)}
-                {f.kind === 'scatter' && f.dots.map(([x, y], i) => <circle cx={x} cy={y} r="2" fill={i % 4 ? '#ece7df' : '#c8f031'} />)}
-              </svg>
-            </div>
-          ))}
-        </div>
-      </div>
+      <svg class="graph-fallback" viewBox="-100 -100 200 200">
+        {fbEdges.map(([i, j]) => <line x1={fbNodes[i].x} y1={fbNodes[i].y} x2={fbNodes[j].x} y2={fbNodes[j].y} />)}
+        {fbNodes.map((n) => <circle cx={n.x} cy={n.y} r={n.hub ? 2.6 : 1.6} class={n.hub ? 'is-hub' : ''} />)}
+      </svg>
     </div>
     <div class="hero__pane frost" data-depth="30">
       <div class="pane__tab"><b>zsh</b><span>~/projects</span></div>
@@ -79,13 +71,28 @@ const faces = [
   .hero__lede { margin-top: var(--space-6); max-width: 34rem; font-size: var(--text-lg); line-height: 1.6; color: var(--muted); }
   .hero__cta { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-8); }
 
+  /* load sequence (after the nav wordmark has typed itself): prompt → name → role → motto → buttons → graph.
+     Fill mode "backwards" only, so nothing lingers after the ~0.9 s sequence (scroll parallax and hover keep working). */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__copy > * { animation: hero-in 450ms var(--ease-out) backwards; }
+    .hero__copy > :nth-child(1) { animation-delay: 650ms; }
+    .hero__copy > :nth-child(2) { animation-delay: 730ms; }
+    .hero__copy > :nth-child(3) { animation-delay: 810ms; }
+    .hero__copy > :nth-child(4) { animation-delay: 870ms; }
+    .hero__copy > :nth-child(5) { animation-delay: 930ms; }
+    .hero__copy :global(.prompt__cmd) { animation: hero-type 270ms steps(6, end) 720ms backwards; }
+    .hero__stage { animation: hero-stage 550ms var(--ease-out) 990ms backwards; }
+  }
+  @keyframes hero-in { from { opacity: 0; translate: 0 12px; } }
+  @keyframes hero-type { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes hero-stage { from { opacity: 0; scale: .96; } }
   .hero__stage { position: relative; aspect-ratio: 1 / 1; width: 100%; max-width: 520px; margin-inline: auto; }
   @media (max-width: 959px) { .hero__stage { max-width: 400px; } }
   /* dark scrim so the rain recedes behind the 3D object */
   .hero__stage::before { content: ""; position: absolute; inset: 4%; border-radius: 50%; background: radial-gradient(closest-side, rgb(11 10 9 / .92), rgb(11 10 9 / .6) 70%, transparent); }
   .hero__3d { position: absolute; inset: 0; display: grid; place-items: center; }
   .hero__3d :global(canvas) { position: absolute; inset: 0; width: 100% !important; height: 100% !important; }
-  .hero__3d:global(.has-webgl) .cube-fallback { display: none; }
+  .hero__3d:global(.has-webgl) .graph-fallback { display: none; }
   .hero__3d { touch-action: manipulation; }
 
   .hero__pane {
@@ -96,17 +103,9 @@ const faces = [
   .hero__pre { padding: 12px 16px 14px; font-size: 12.5px; line-height: 1.75; color: var(--fg); white-space: pre-wrap; }
   .hero__item { display: inline-block; margin-right: 12px; }
 
-  /* CSS-3D fallback cube with static graphs */
-  .cube-fallback { width: 46%; aspect-ratio: 1; perspective: 1000px; container-type: inline-size; }
-  .cube { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transform: rotateX(-24deg) rotateY(-36deg); animation: cube-spin 40s linear infinite; }
-  .cube__face { position: absolute; inset: 0; padding: 10%; background: var(--surface); border: 1px solid var(--accent-line); }
-  .cube__face svg { width: 100%; height: 100%; }
-  .cube__face--f { transform: translateZ(50cqi); }
-  .cube__face--b { transform: rotateY(180deg) translateZ(50cqi); }
-  .cube__face--r { transform: rotateY(90deg) translateZ(50cqi); }
-  .cube__face--l { transform: rotateY(-90deg) translateZ(50cqi); }
-  .cube__face--t { transform: rotateX(90deg) translateZ(50cqi); }
-  .cube__face--d { transform: rotateX(-90deg) translateZ(50cqi); }
-  @keyframes cube-spin { from { transform: rotateX(-24deg) rotateY(-36deg); } to { transform: rotateX(-24deg) rotateY(324deg); } }
-  @media (prefers-reduced-motion: reduce) { .cube { animation: none; } }
+  /* SVG fallback graph (shown until/unless WebGL mounts) */
+  .graph-fallback { width: 86%; height: 86%; overflow: visible; }
+  .graph-fallback line { stroke: rgb(236 231 223 / .2); stroke-width: .5; }
+  .graph-fallback circle { fill: rgb(236 231 223 / .85); }
+  .graph-fallback circle.is-hub { fill: var(--accent); }
 </style>
