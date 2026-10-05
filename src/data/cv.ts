@@ -164,15 +164,20 @@ export const experience: Job[] = [
     title: 'Senior Frontend Developer',
     period: 'фев 2022 — н. в.',
     place: 'Киев',
-    points: [],
-    todo: 'TODO: 2–3 результата за 4+ года (продукт, масштаб, что улучшилось)',
+    points: [
+      'Took projects from first mockups to production and supported them after release.',
+      'Owned the visual layer and UX of the interfaces, from prototype to final polish.',
+      'Worked closely with product and design, from problem framing to launch.',
+    ],
   },
   {
     org: 'Rocket',
     title: 'Front-End Developer',
     period: 'ноя 2020 — янв 2022',
-    points: [],
-    todo: 'TODO: продукт и результат',
+    points: [
+      'Shipped features to production as part of a product team.',
+      'Turned design mockups into working interfaces, down to the details.',
+    ],
   },
   {
     org: 'KITCODE',
