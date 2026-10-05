@@ -6,7 +6,7 @@
   "description": "listepo.dev — one-page CV / business card for Ivan Tuhai",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/build-pdf.mjs",
     "preview": "astro preview --port 4321"
   },
   "dependencies": {
@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "playwright-core": "^1.63.0",
     "tailwindcss": "^4.3.3"
   }
 }

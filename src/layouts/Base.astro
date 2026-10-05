@@ -26,8 +26,25 @@ const jsonLd = {
     <title>{site.title}</title>
     <meta name="description" content={site.description} />
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#0b0a09" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f0e8" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0a09" />
+    <meta name="color-scheme" content="dark light" />
+    <!-- theme before first paint (no flash): saved choice → prefers-color-scheme; keeps theme-color in sync -->
+    <script is:inline>
+      (function () {
+        var s = null;
+        try { s = localStorage.getItem('cv:theme'); } catch (e) {}
+        var manual = s === 'light' || s === 'dark';
+        var t = manual ? s : (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        var d = document.documentElement;
+        d.setAttribute('data-theme', t);
+        d.style.colorScheme = t;
+        if (manual) {
+          var m = document.querySelectorAll('meta[name="theme-color"]');
+          for (var i = 0; i < m.length; i++) m[i].setAttribute('content', t === 'light' ? '#f4f0e8' : '#0b0a09');
+        }
+      })();
+    </script>
     <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
 
     <meta property="og:type" content="profile" />

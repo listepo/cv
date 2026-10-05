@@ -1,9 +1,13 @@
 import { mountRain } from './rain';
 import { mountGlitch } from './glitch';
 import { mountSound } from './sound';
+import { mountTheme } from './theme';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
+
+// 00. Theme toggle + theme-color sync (initial theme is set inline in <head>)
+mountTheme();
 
 // 0. Digital rain (after fonts so glyph metrics are stable)
 const rain = document.querySelector<HTMLCanvasElement>('#rain');

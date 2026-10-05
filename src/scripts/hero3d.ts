@@ -5,6 +5,7 @@
 import { Renderer, Camera, Transform, Program, Mesh, Geometry, Mat4, Vec3 } from 'ogl';
 import { GRAPH_CONFIG as CFG } from './graph-config';
 import { createNetwork } from './network-sim';
+import { readRgb } from './theme';
 
 const pointVertex = /* glsl */ `
 attribute vec3 position;
@@ -88,7 +89,11 @@ export function mountHero3D(host: HTMLElement, opts: { reduceMotion: MediaQueryL
     position: { size: 3, data: pPos }, aSize: { size: 1, data: pSize }, aAlpha: { size: 1, data: pAlpha }, aLit: { size: 1, data: pLit },
   });
   const lineGeo = new Geometry(gl, { position: { size: 3, data: lPos }, aAlpha: { size: 1, data: lAlpha }, aLit: { size: 1, data: lLit } });
-  const colors = { uFg: { value: [0.925, 0.906, 0.875] }, uAccent: { value: [0.784, 0.941, 0.192] } }; // --fg, --accent
+  // colours come from the active theme's tokens; swapped as uniforms on 'cv:theme' (no WebGL re-init)
+  const colors = {
+    uFg: { value: readRgb('--fg-rgb', [0.925, 0.906, 0.875]) },
+    uAccent: { value: readRgb('--graph-accent-rgb', [0.784, 0.941, 0.192]) },
+  };
   const uScale = { value: 0 };
   const pointProg = new Program(gl, { vertex: pointVertex, fragment: pointFragment, transparent: true, depthTest: false, uniforms: { ...colors, uScale } });
   const lineProg = new Program(gl, { vertex: lineVertex, fragment: lineFragment, transparent: true, depthTest: false, uniforms: colors });
@@ -198,6 +203,11 @@ export function mountHero3D(host: HTMLElement, opts: { reduceMotion: MediaQueryL
     uScale.value = height * dpr * 0.0105; // node px size scales with the stage
     if (!raf) frame(performance.now(), false);
   };
+  addEventListener('cv:theme', () => {
+    colors.uFg.value = readRgb('--fg-rgb', colors.uFg.value);
+    colors.uAccent.value = readRgb('--graph-accent-rgb', colors.uAccent.value);
+    if (!raf) frame(performance.now(), false);
+  });
   new ResizeObserver(resize).observe(host);
   new IntersectionObserver(([en]) => { visible = en.isIntersecting; update(); }, { rootMargin: '80px' }).observe(host);
   document.addEventListener('visibilitychange', update);

@@ -31,6 +31,9 @@ Heading semantics: one `h1`, `h2` per section, `h3` per project/job. Glitch targ
 ## 2. Visual system tokens
 
 ### Colour
+Two themes, **dark** (default without JS) and **light**, share one set of semantic tokens; `:root[data-theme="light"]` only swaps values (`src/styles/global.css`). See §2b for switching.
+
+#### Dark theme
 Contrast = WCAG ratio. "Rain peak" = worst case behind text: brightest rain glyph composited over `--bg` (desktop reading column ≈ 7% lime `#181a0c`; mobile ≈ 17% lime `#2b3110`).
 
 | Token | Hex | vs bg | vs surface `#141311` | vs surface-2 | rain peak desktop / mobile | Use |
@@ -45,14 +48,46 @@ Contrast = WCAG ratio. "Rain peak" = worst case behind text: brightest rain glyp
 | `--fg-strong` | `#faf7f2` | 18.51 | 17.38 | 16.25 | — | Headings |
 | `--muted` | `#a8a198` | 7.74 | 7.26 | 6.79 | 6.89 / 5.30 | Secondary text |
 | `--subtle` | `#9a948b` | 6.58 | 6.20 | 5.77 | 5.86 / 4.51 | Labels, line numbers |
-| `--accent` (lime) | `#c8f031` | 15.04 | 14.12 | 13.20 | 13.39 / 10.30 | Prompt sigil, cursor, primary button, status "release", hashes, rain |
+| `--accent` (lime) | `#c8f031` | 15.04 | 14.12 | 13.20 | 13.39 / 10.30 | Text/stroke signal: prompt sigil, cursor, status "release", hashes, links on hover, rails, focus ring, progress bar |
+| `--accent-fill` | `#c8f031` | — | — | — | — | Filled surfaces with `--accent-ink` text: primary button, "open to offers" tag, selection, skip link |
 | `--accent-hover` | `#d8f75e` | — | — | — | — | Primary hover (ink 16.38) |
 | `--accent-ink` | `#0b0a09` | 15.04 on lime | — | — | — | Text on lime |
 | `--accent-soft` | `rgb(200 240 49 / .10)` | — | — | — | — | Row hover |
 | `--accent-line` | `rgb(200 240 49 / .45)` | — | — | — | — | TODO border, link underline, orbit |
 | `--danger` | `#ff6a4d` | 6.99 | 6.56 | 6.14 | — | State only + glitch red channel |
 
+Channel / layer tokens (both themes): `--bg-rgb`, `--fg-rgb`, `--accent-rgb`, `--danger-rgb` (for `rgb(var(--x-rgb) / a)` mixes: scrim, dot matrix, glitch RGB split, fallback graph), `--graph-accent-rgb` (WebGL hubs/sparks), `--rain-rgb`, `--rain-opacity`, `--rain-opacity-sm`, `--scanline`, `--topbar-bg`, `--accent-fill-border`.
+
+#### Light theme
+Warm paper and near-black ink. Bright lime survives only as a **fill** with dark ink; text, links, strokes, focus ring, cursor and progress bar use a dark olive `--accent`. "Rain peak" = brightest olive glyph over `--bg` (desktop reading column ≈ 4.5% olive `#ece9de`; mobile ≈ 11.4% `#e1e0ce`).
+
+| Token | Value | vs bg `#f4f0e8` | vs surface `#fbf9f4` | vs surface-2 `#e9e3d8` | rain peak desktop / mobile | Use |
+|---|---|---|---|---|---|---|
+| `--bg` | `#f4f0e8` | — | — | — | — | Page (warm paper); theme-color |
+| `--bg-elev` | `#ede8de` | — | — | — | — | Tags |
+| `--surface` | `#fbf9f4` | — | — | — | — | Panes |
+| `--surface-2` | `#e9e3d8` | — | — | — | — | Raised inner |
+| `--line` / `--line-strong` | `rgb(33 30 26 / .11)` / `/ .22` | — | — | — | — | Hairlines / borders |
+| `--fg` | `#211e1a` | 14.60 | 15.77 | 13.00 | 13.65 / 12.45 | Body ink |
+| `--fg-strong` | `#0f0d0b` | 17.06 | 18.43 | 15.19 | 15.96 / 14.55 | Headings |
+| `--muted` | `#58524a` | 6.79 | 7.34 | 6.04 | 6.35 / 5.79 | Secondary text |
+| `--subtle` | `#655f56` | 5.56 | 6.00 | 4.95 | 5.20 / 4.74 | Labels, line numbers |
+| `--accent` (olive) | `#4a6000` | 6.23 | 6.73 | 5.55 | 5.83 / 5.31 | Same roles as dark `--accent` |
+| `--accent-fill` | `#c8f031` | — | — | — | — | Fills; `--accent-ink` on it 15.04, on `--accent-hover #b8e021` 12.93; 1px `--accent-fill-border` `rgb(74 96 0 / .45)` keeps the shape visible on paper |
+| `--accent-soft` / `--accent-line` | `rgb(74 96 0 / .08)` / `/ .45` | — | — | — | — | Row hover / underlines, TODO border |
+| `--danger` | `#a5311a` | 6.05 | 6.53 | 5.38 | 5.66 / 5.16 | State only + glitch red channel |
+| `--graph-accent-rgb` | `104 134 0` | 3.70 (non-text) | — | — | — | WebGL hubs, sparks, SVG fallback hubs |
+| `--rain-rgb` | `74 96 0` | — | — | — | — | Rain glyphs; canvas opacity .34 desktop / .12 mobile |
+
+Light shadows are warm and much lighter (`rgb(60 45 25 / .06–.10)`), the highlight is `inset 0 1px 0 rgb(255 255 255 / .7)`, the frosted pane is `rgb(251 249 244 / .78)` (opaque `#fbf9f4`), scanlines `rgb(60 45 25 / .035)`, top bar `rgb(244 240 232 / .94)`.
+
 Rules: lime is the only hue; everything else is warm neutral. No mint, amber, cyan, teal, blue or purple. Status uses glyph + label (`● released`, `◐ active`, `◌ wip/research`), never colour alone.
+
+### 2b. Theme switching & browser header colour
+- **Before first paint:** an inline script in `<head>` (`Base.astro`) sets `html[data-theme]` and `style.colorScheme` from `localStorage['cv:theme']` (`light`/`dark`), otherwise from `prefers-color-scheme`. No flash. Without JS the page stays dark.
+- **Toggle:** `.theme-toggle` in the nav (40 × 40 px, moon in dark / sun in light, `aria-label="Dark theme"` + `aria-pressed`, title "Switch to light/dark theme", lime/olive focus ring). A click flips the theme and saves the choice; with no saved choice the page keeps following OS changes live (`src/scripts/theme.ts`).
+- **Browser header:** `<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f0e8">` and `… (prefers-color-scheme: dark) … "#0b0a09"` (= each theme's `--bg`), plus `<meta name="color-scheme" content="dark light">`. After a manual choice both metas get the chosen theme's colour (in the inline script and on toggle), so the header follows the site, not the OS. There is no web manifest, and the Apple status-bar meta only applies to home-screen web apps, so neither is used.
+- **Canvas/WebGL:** toggling fires a `cv:theme` event. The rain re-reads `--rain-rgb` and redraws; the hero graph swaps its `uFg`/`uAccent` uniforms from `--fg-rgb`/`--graph-accent-rgb` (no WebGL re-init).
 
 ### Typography
 - Display / UI / code: **Geist Mono Variable** (`--font-mono`), `zero` + `ss01`.
@@ -177,13 +212,14 @@ Hit targets ≥ 44px. `forced-colors`: system borders, rain/scanlines hidden.
 ## 4. Handoff
 
 ### CSS variables
+Dark values below; the light overrides live in `:root[data-theme="light"]` in `src/styles/global.css` (values in §2 → Light theme).
 ```css
 :root {
   color-scheme: dark;
   --bg: #0b0a09; --bg-elev: #110f0e; --surface: #141311; --surface-2: #1c1a17;
   --line: rgb(236 231 223 / .09); --line-strong: rgb(236 231 223 / .18);
   --fg: #ece7df; --fg-strong: #faf7f2; --muted: #a8a198; --subtle: #9a948b;
-  --accent: #c8f031; --accent-hover: #d8f75e; --accent-ink: #0b0a09;
+  --accent: #c8f031; --accent-fill: #c8f031; --accent-fill-border: transparent; --accent-hover: #d8f75e; --accent-ink: #0b0a09;
   --accent-soft: rgb(200 240 49 / .10); --accent-line: rgb(200 240 49 / .45);
   --danger: #ff6a4d;
 
@@ -227,6 +263,8 @@ Hit targets ≥ 44px. `forced-colors`: system borders, rain/scanlines hidden.
 - Content lives in `src/data/cv.ts`; every `TODO:` string renders as a TODO tag.
 - `og:image` is still TODO (1200×630 PNG at `/og.png`).
 - Name: English spelling is "Ivan Tuhai" (confirmed by Ivan). LinkedIn now uses the resume's vanity URL `linkedin.com/in/listepo`.
+- **CV PDF:** "Download CV (PDF)" (ghost button with a download icon, next to the hero CTAs) links to `/cv/ivan-tuhai-cv.pdf` with `download`. The PDF is generated at build time: `npm run build` = `astro build && node scripts/build-pdf.mjs`, which serves `dist/` locally and prints the `/cv/print/` route (`src/pages/print.astro`, same `src/data/cv.ts`, noindex) to A4 with headless Chrome via `playwright-core` (`channel: 'chrome'`, or `CHROME_PATH`). The output is tagged with an outline and selectable text, with working links. It is one column with standard headings (Summary, Experience, Projects), currently 2 pages, with no skills or languages sections and a subtle lime accent. In CI (withastro/action runs the same build script; ubuntu runners ship Chrome) a missing browser fails the build. Locally it only warns.
+- **Print:** `@media print` in `global.css` gives Cmd+P a clean light A4 result: decoration layers, nav, CTAs and the graph are hidden, reveals forced visible, no animation, panes flattened, `break-inside: avoid` on rows.
 - `window.__cvGlitch(selector)` freezes a glitch frame — used only for review screenshots.
 - Body has no background on purpose (html paints `--bg`), otherwise the fixed rain/backdrop layers at negative z-index would be covered.
 

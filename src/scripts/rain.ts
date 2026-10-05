@@ -22,10 +22,12 @@ const nextGlyphs = () => {
   return out;
 };
 
-export function mountRain(canvas: HTMLCanvasElement, opts: { reduceMotion: MediaQueryList; color?: string }) {
+export function mountRain(canvas: HTMLCanvasElement, opts: { reduceMotion: MediaQueryList }) {
   const ctx = canvas.getContext('2d', { alpha: true });
   if (!ctx) return;
-  const color = opts.color ?? '200 240 49'; // --accent #c8f031
+  // glyph colour = --rain-rgb of the active theme (lime on dark, olive on light)
+  const readColor = () => getComputedStyle(document.documentElement).getPropertyValue('--rain-rgb').trim() || '200 240 49';
+  let color = readColor();
   const fps = 30;
   const step = 1000 / fps;
   let cols: Column[] = [];
@@ -101,6 +103,8 @@ export function mountRain(canvas: HTMLCanvasElement, opts: { reduceMotion: Media
   });
   document.addEventListener('visibilitychange', update);
   opts.reduceMotion.addEventListener('change', () => { if (opts.reduceMotion.matches) staticFrame(); update(); });
+
+  addEventListener('cv:theme', () => { color = readColor(); ctx.clearRect(0, 0, w, h); staticFrame(); });
 
   layout();
   staticFrame(); // pre-fill so the first paint already has rain (and reduced motion gets a still frame)

@@ -1,0 +1,102 @@
+---
+// Print/PDF version of the CV (rendered to /ivan-tuhai-cv.pdf by scripts/build-pdf.mjs after `astro build`).
+// Same data as the page (src/data/cv.ts); ATS-friendly: one column, real text, standard headings, working links.
+// No skills or languages sections (Ivan's call). No scripts, no canvas, no animation.
+import '../styles/fonts.css';
+import { person, links, about, experience, earlier, projects, site } from '../data/cv';
+const featured = projects.filter((p) => p.featured);
+const rest = projects.filter((p) => !p.featured);
+const role = person.role.charAt(0).toUpperCase() + person.role.slice(1);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{person.name} — CV</title>
+    <meta name="author" content={person.name} />
+    <meta name="description" content={site.description} />
+    <link rel="canonical" href={site.url} />
+  </head>
+  <body>
+    <main class="cv">
+      <header class="cv__head">
+        <h1>{person.name}</h1>
+        <p class="cv__role">{role} · Senior Frontend Developer at KSF Technologies AG · {person.location}</p>
+        <ul class="cv__contacts">
+          {links.map((l) => <li><a href={l.href}>{l.value}</a></li>)}
+          <li><a href={site.url}>{site.domain}</a></li>
+        </ul>
+      </header>
+
+      <section>
+        <h2>Summary</h2>
+        {about.map((p) => <p>{p}</p>)}
+      </section>
+
+      <section>
+        <h2>Experience</h2>
+        {experience.map((j) => (
+          <article class="job">
+            <div class="job__head">
+              <h3>{j.title}, {j.url ? <a href={j.url}>{j.org}</a> : j.org}</h3>
+              <p class="job__meta">{j.period}{j.place && ` · ${j.place}`}</p>
+            </div>
+            {j.points.length > 0 && <ul>{j.points.map((pt) => <li>{pt}</li>)}</ul>}
+          </article>
+        ))}
+        <article class="job">
+          <div class="job__head"><h3>Earlier roles</h3><p class="job__meta">2009 — 2015</p></div>
+          <ul class="earlier">
+            {earlier.map((e) => <li>{e.title}, {e.org} <span class="job__meta">({e.period})</span></li>)}
+          </ul>
+        </article>
+      </section>
+
+      <section>
+        <h2>Projects</h2>
+        {featured.map((p) => (
+          <article class="proj">
+            <h3>{p.name} <a class="proj__repo" href={`https://github.com/${p.repo}`}>github.com/{p.repo}</a></h3>
+            <p>{p.summary}</p>
+          </article>
+        ))}
+        <ul class="proj__rest">
+          {rest.map((p) => <li><a href={`https://github.com/${p.repo}`}>{p.name}</a>: {p.summary}</li>)}
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
+<style is:global>
+  @page { size: A4; margin: 14mm 15mm 14mm; }
+  :root { --ink: #16140f; --muted: #4f4a42; --line: #d9d3c7; --accent: #4a6000; --lime: #c8f031; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: #fff; }
+  body { font-family: "Geist Variable", "Helvetica Neue", Arial, sans-serif; font-size: 9.6pt; line-height: 1.45; color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cv { max-width: 180mm; margin: 0 auto; }
+  @media screen { .cv { padding: 14mm 0; } }
+  a { color: inherit; text-decoration: none; }
+  h1 { font-family: "Geist Mono Variable", ui-monospace, monospace; font-size: 24pt; line-height: 1.1; letter-spacing: -0.02em; font-weight: 600; }
+  .cv__head { padding-bottom: 3.5mm; border-bottom: 2px solid var(--lime); margin-bottom: 4mm; }
+  .cv__role { margin-top: 1.2mm; font-size: 10.5pt; color: var(--muted); }
+  .cv__contacts { list-style: none; display: flex; flex-wrap: wrap; gap: 1mm 4mm; margin-top: 2mm; font-family: "Geist Mono Variable", ui-monospace, monospace; font-size: 8.6pt; }
+  .cv__contacts a { color: var(--accent); }
+  h2 { font-family: "Geist Mono Variable", ui-monospace, monospace; font-size: 10pt; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--ink); margin: 4.5mm 0 2mm; padding-bottom: 1mm; border-bottom: 1px solid var(--line); break-after: avoid; }
+  h2::before { content: ""; display: inline-block; width: 2.2mm; height: 2.2mm; margin-right: 2mm; background: var(--lime); border: .2mm solid var(--accent); vertical-align: 0; }
+  section p + p { margin-top: 1.4mm; }
+  h3 { font-size: 10pt; font-weight: 600; }
+  .job, .proj { break-inside: avoid; margin-bottom: 2.6mm; }
+  .job__head { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; }
+  .job__head a { color: var(--accent); }
+  .job__meta { font-family: "Geist Mono Variable", ui-monospace, monospace; font-size: 8.4pt; color: var(--muted); white-space: nowrap; }
+  ul { padding-left: 4.2mm; margin-top: .8mm; }
+  li { margin-top: .4mm; }
+  li::marker { color: var(--accent); }
+  .earlier { columns: 2; column-gap: 8mm; }
+  .proj__repo { font-family: "Geist Mono Variable", ui-monospace, monospace; font-size: 8.4pt; font-weight: 400; color: var(--accent); margin-left: 2mm; }
+  .proj p { margin-top: .4mm; }
+  .proj__rest { margin-top: 1mm; }
+  .proj__rest a { font-weight: 600; color: var(--accent); }
+</style>
