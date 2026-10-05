@@ -3,7 +3,8 @@ import '../styles/fonts.css';
 import '../styles/global.css';
 import { site, person } from '../data/cv';
 
-const canonical = new URL(Astro.url.pathname, site.url).href;
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const canonical = site.url;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -27,16 +28,16 @@ const jsonLd = {
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#0b0a09" />
     <meta name="color-scheme" content="dark" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
 
     <meta property="og:type" content="profile" />
-    <meta property="og:site_name" content={site.domain} />
+    <meta property="og:site_name" content="listepo" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={site.title} />
     <meta property="og:description" content={site.description} />
     <meta property="profile:username" content={person.handle} />
-    <!-- TODO: og:image — 1200×630 PNG at https://listepo.dev/og.png -->
+    <!-- TODO: og:image — 1200×630 PNG at public/og.png -->
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@listepo" />
     <meta name="twitter:title" content={site.title} />

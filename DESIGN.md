@@ -1,9 +1,11 @@
-# listepo.dev — CV / business card · Design system
+# Ivan Tuhai — CV / business card · Design system
 
 One-page personal site for Ivan Tuhai (`listepo`). UI copy is English (`<html lang="en">`); code identifiers are English.
 Stack: Astro 5 (static) + Tailwind 4 (`@tailwindcss/vite`) + OGL (lazy hero only). Self-hosted Geist / Geist Mono via Fontsource.
 
-Run: `npm i && npm run dev` (http://localhost:4321) · `npm run build` → `dist/` · `npm run preview`.
+Live: https://listepo.github.io/cv/ (GitHub Pages, `base: '/cv'`; canonical/OG use this URL until listepo.dev is deployed).
+
+Run: `npm i && npm run dev` (http://localhost:4321/cv/) · `npm run build` → `dist/` · `npm run preview`.
 
 ## 0. Identity
 
@@ -22,7 +24,7 @@ No skills, stack or languages lists anywhere (per Ivan). Order follows a resume:
 | 3 | `#experience` | `02 … git log --author=ivan --oneline` | One pane as a git-log: hash · title @ org · impact bullets · period · city. 8 detailed roles (Pyrlyn → 111PIX UA) + compact "Earlier · 2009 — 2015" table (6 roles). |
 | 4 | `#projects` | `03 … ls -la ~/projects` | 4 featured tilt panes (ketch, rtok, runa, cox) + `ls -la` pane of other repos (no language column). |
 | 5 | `#contact` | `04 … cat contacts` | One pane, 2-column rows: email (mailto), linkedin, github, x. |
-| — | footer | `listepo.dev▌` | © year Ivan Tuhai, `cd ~ ↑`. |
+| — | footer | `listepo.github.io/cv▌` | © year Ivan Tuhai, `cd ~ ↑`. |
 
 Heading semantics: one `h1`, `h2` per section, `h3` per project/job. Glitch targets: h1 + every h2 (`data-glitch`).
 

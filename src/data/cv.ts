@@ -2,9 +2,10 @@
 // See DESIGN.md → "Content sources". Missing data is marked with `TODO:`; nothing here is invented.
 
 export const site = {
-  domain: 'listepo.dev',
-  url: 'https://listepo.dev',
-  title: 'Ivan Tuhai — Founder & CTO of Pyrlyn · listepo.dev',
+  // Canonical URL = the live GitHub Pages address (listepo.dev is not deployed yet).
+  domain: 'listepo.github.io/cv',
+  url: 'https://listepo.github.io/cv/',
+  title: 'Ivan Tuhai — Founder & CTO of Pyrlyn',
   description:
     'Ivan Tuhai (listepo) — engineer building software since 2009. Founder & CTO of Pyrlyn, Senior Frontend Developer at KSF Technologies AG. Projects: ketch, rtok, runa, cox.',
 };
