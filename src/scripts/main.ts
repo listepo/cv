@@ -11,7 +11,7 @@ if (rain) document.fonts.ready.then(() => mountRain(rain, { reduceMotion }));
 // 0b. Rare heading glitches
 mountGlitch({ reduceMotion });
 
-// 1. Lazy WebGL hero (CSS globe stays as fallback)
+// 1. Lazy WebGL hero (CSS-3D cube stays as fallback)
 const host = document.querySelector<HTMLElement>('#hero-3d');
 if (host) {
   const probe = document.createElement('canvas');
