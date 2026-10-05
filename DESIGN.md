@@ -1,6 +1,6 @@
 # listepo.dev — CV / business card · Design system
 
-One-page personal site for Ivan Tuhai (`listepo`). UI copy is Russian; code identifiers are English.
+One-page personal site for Ivan Tuhai (`listepo`). UI copy is English (`<html lang="en">`); code identifiers are English.
 Stack: Astro 5 (static) + Tailwind 4 (`@tailwindcss/vite`) + OGL (lazy hero only). Self-hosted Geist / Geist Mono via Fontsource.
 
 Run: `npm i && npm run dev` (http://localhost:4321) · `npm run build` → `dist/` · `npm run preview`.
@@ -17,9 +17,9 @@ No skills, stack or languages lists anywhere (per Ivan). Order follows a resume:
 | # | id | Prompt header | Content |
 |---|---|---|---|
 | — | top bar | `ivan tuhai▌` | Sticky flat bar (94% opaque bg, 1px bottom hairline). Numbered mono links `01 about · 02 experience · 03 projects · 04 contact`; lime underline on hover/active. Mobile: only `04 contact`. |
-| 1 | `#top` hero | `~/ivan ❯ whoami` | Name (h1, glitch target), `@listepo / основатель и технический директор Pyrlyn`, lime "открыт к предложениям" tag, motto, primary + outline CTA. Stage: dark radial scrim, lazy OGL dot-matrix globe with orbit ring (CSS fallback), floating frosted `zsh ~/projects` pane. |
+| 1 | `#top` hero | `~/ivan ❯ whoami` | Name (h1, glitch target), `@listepo / founder & CTO of Pyrlyn`, lime "open to offers" tag, motto, primary + outline CTA. Stage: dark radial scrim, lazy OGL dot-matrix globe with orbit ring (CSS fallback), floating frosted `zsh ~/projects` pane. |
 | 2 | `#about` | `01 ~/ivan ❯ cat about.md` | 3 paragraphs (career arc, tech-lead track, current roles) + `profile.toml` pane: role, location (country only), dev_since, handle, open_to_work. |
-| 3 | `#experience` | `02 … git log --author=ivan --oneline` | One pane as a git-log: hash · title @ org · impact bullets · period · city. 8 detailed roles (Pyrlyn → 111PIX UA) + compact "Ранее · 2009 — 2015" table (6 roles). |
+| 3 | `#experience` | `02 … git log --author=ivan --oneline` | One pane as a git-log: hash · title @ org · impact bullets · period · city. 8 detailed roles (Pyrlyn → 111PIX UA) + compact "Earlier · 2009 — 2015" table (6 roles). |
 | 4 | `#projects` | `03 … ls -la ~/projects` | 4 featured tilt panes (ketch, rtok, runa, cox) + `ls -la` pane of other repos (no language column). |
 | 5 | `#contact` | `04 … cat contacts` | One pane, 2-column rows: email (mailto), linkedin, github, x. |
 | — | footer | `listepo.dev▌` | © year Ivan Tuhai, `cd ~ ↑`. |
@@ -50,11 +50,11 @@ Contrast = WCAG ratio. "Rain peak" = worst case behind text: brightest rain glyp
 | `--accent-line` | `rgb(200 240 49 / .45)` | — | — | — | — | TODO border, link underline, orbit |
 | `--danger` | `#ff6a4d` | 6.99 | 6.56 | 6.14 | — | State only + glitch red channel |
 
-Rules: lime is the only hue; everything else is warm neutral. No mint, amber, cyan, teal, blue or purple. Status uses glyph + label (`● релиз`, `◐ в работе`, `◌ wip/research`), never colour alone.
+Rules: lime is the only hue; everything else is warm neutral. No mint, amber, cyan, teal, blue or purple. Status uses glyph + label (`● released`, `◐ active`, `◌ wip/research`), never colour alone.
 
 ### Typography
 - Display / UI / code: **Geist Mono Variable** (`--font-mono`), `zero` + `ss01`.
-- Body: **Geist Variable** (`--font-sans`), line-height 1.6, ≤ 40rem. Both include Cyrillic.
+- Body: **Geist Variable** (`--font-sans`), line-height 1.6, ≤ 40rem. Only Latin, Latin-ext and (mono) symbols subsets are shipped — see `src/styles/fonts.css`.
 
 | Token | Size | Use |
 |---|---|---|
@@ -175,9 +175,9 @@ Hit targets ≥ 44px. `forced-colors`: system borders, rain/scanlines hidden.
 - Body has no background on purpose (html paints `--bg`), otherwise the fixed rain/backdrop layers at negative z-index would be covered.
 
 ## 5. Content sources
-- **Resume PDF** (LinkedIn export, Oct 2026): role at Pyrlyn, location (Украина), email, LinkedIn `in/listepo`, all employers, titles, dates, cities and the few achievement notes. Rephrased into impact bullets; nothing added. Skills and spoken-language blocks deliberately omitted; framework lists ("Технологии: …") dropped.
+- **Resume PDF** (LinkedIn export, Oct 2026): role at Pyrlyn, location (Ukraine), email, LinkedIn `in/listepo`, all employers, titles, dates, cities and the few achievement notes. Rephrased into impact bullets; nothing added. Skills and spoken-language blocks deliberately omitted; framework lists ("Technologies: …") dropped. Resume content translated from Russian into English.
 - `gh api users/listepo` (name, hireable, created 2012, X handle, public repo count), `gh api users/listepo/repos`, `gh repo list pyrlyn`, `gh api orgs/pyrlyn`.
 - Profile README `listepo/listepo` (role "engineer", motto, X/LinkedIn/GitHub links, project one-liners).
-- Org profile `pyrlyn/.github` → `profile/README.md` (Russian product descriptions for ketch, rtok, runa, cox).
+- Org profile `pyrlyn/.github` → `profile/README.md` (product descriptions for ketch, rtok, runa, cox; translated to English, cross-checked with the English READMEs).
 - READMEs: `apps/{rtok,ketch,cox,runa,bindsmith,stator}`, `packages/slint_dart`; `apps/landing` (palette only, for harmony).
 - No CV/resume/about files were found in ~/Documents, ~/Desktop, ~/Downloads, ~/GitHub.

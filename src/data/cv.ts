@@ -4,24 +4,24 @@
 export const site = {
   domain: 'listepo.dev',
   url: 'https://listepo.dev',
-  title: 'Ivan Tuhai — основатель и технический директор Pyrlyn · listepo.dev',
+  title: 'Ivan Tuhai — Founder & CTO of Pyrlyn · listepo.dev',
   description:
-    'Ivan Tuhai (listepo) — инженер, в разработке с 2009 года. Основатель и технический директор Pyrlyn, Senior Frontend Developer в KSF Technologies AG. Проекты: ketch, rtok, runa, cox.',
+    'Ivan Tuhai (listepo) — engineer building software since 2009. Founder & CTO of Pyrlyn, Senior Frontend Developer at KSF Technologies AG. Projects: ketch, rtok, runa, cox.',
 };
 
 export const person = {
   // English spelling confirmed by Ivan: "Tuhai".
   name: 'Ivan Tuhai',
   handle: 'listepo',
-  role: 'основатель и технический директор Pyrlyn', // resume: "Технический директор в компании Pyrlyn", "Учредитель"
+  role: 'founder & CTO of Pyrlyn', // resume: CTO ("Технический директор") and founder ("Учредитель") of Pyrlyn
   devSince: 2009, // resume: Freelance Web Development, Nov 2009
   hireable: true, // gh api users/listepo → hireable: true
-  // Motto from the listepo/listepo profile README, translated to Russian.
+  // Motto from the listepo/listepo profile README (original English).
   motto: [
-    'Я не просто вайб-кодер.',
-    'Я инженер, который с помощью AI выпускает настоящий, полезный софт.',
+    "I'm not just a vibe coder.",
+    "I'm an engineer who uses AI to ship real, useful software.",
   ],
-  location: 'Украина', // resume header; country only, no address
+  location: 'Ukraine', // resume header; country only, no address
 };
 
 export const links = [
@@ -32,14 +32,14 @@ export const links = [
 ] as const;
 
 export const about = [
-  'Инженер, в разработке с 2009 года: прошёл путь от full-stack-разработчика до техлида фронтенда, сейчас строю собственные продукты.',
-  'Дважды руководил фронтендом как Technical Lead: перепроектировал архитектуру проектов, запускал новые и менторил команду.',
-  'С 2022 года — Senior Frontend Developer в KSF Technologies AG. С сентября 2026 — основатель и технический директор Pyrlyn: инструменты для разработчиков, начиная с AI.',
+  'Engineer building software since 2009: went from full-stack developer to frontend tech lead, and now I build my own products.',
+  'Led frontend twice as Technical Lead: redesigned project architecture, launched new projects and mentored the team.',
+  'Senior Frontend Developer at KSF Technologies AG since 2022. Since September 2026, founder & CTO of Pyrlyn: tools for developers, starting with AI.',
 ];
 
 export const facts = [
   { key: 'role', value: 'CTO, Pyrlyn' },
-  { key: 'location', value: 'Украина' },
+  { key: 'location', value: 'Ukraine' },
   { key: 'dev_since', value: '2009' },
   { key: 'handle', value: 'listepo' },
   { key: 'open_to_work', value: 'true' },
@@ -62,7 +62,7 @@ export const projects: Project[] = [
     featured: true,
     cmd: 'ketch install <tool>',
     summary:
-      'Пакетный менеджер в одном бинарнике: ставит CLI-инструменты и приложения прямо из релизов GitHub на macOS, Linux и Windows — без формул и тапов, с проверкой контрольной суммы.',
+      'A single-binary package manager: installs CLI tools and apps straight from GitHub releases on macOS, Linux and Windows — no formulae or taps, checked against the published checksum.',
   },
   {
     name: 'rtok',
@@ -71,7 +71,7 @@ export const projects: Project[] = [
     featured: true,
     cmd: 'rtok',
     summary:
-      'Сокращает контекст AI-агентов для программирования: хуки Claude Code, MCP-сервер и API-прокси в одном бинарнике. Каждое сокращение измеряется и восстанавливается по id.',
+      'Reduces the context AI coding agents carry: Claude Code hooks, an MCP server and an API proxy in one binary. Every reduction is measured and retrievable by id.',
   },
   {
     name: 'runa',
@@ -80,7 +80,7 @@ export const projects: Project[] = [
     featured: true,
     cmd: 'runa fit',
     summary:
-      'Local-first AI-раннер: до скачивания проверяет, потянет ли машина GGUF-модель, запускает её через llama.cpp или обращается к OpenAI и Anthropic. OpenAI-совместимый serve.',
+      'A local-first AI runner: checks whether a GGUF model fits your machine before you download it, runs it via llama.cpp or calls OpenAI and Anthropic. OpenAI-compatible serve.',
   },
   {
     name: 'cox',
@@ -89,49 +89,49 @@ export const projects: Project[] = [
     featured: true,
     cmd: 'cox run -p "…"',
     summary:
-      'Модульный агент для программирования в терминале с безопасным событийным ядром: TUI, headless-режим, интеграция с редакторами через ACP и MCP.',
+      'A modular terminal coding agent with a safe, event-driven core: TUI, headless mode, editor integration via ACP and MCP.',
   },
   {
     name: 'stator',
     repo: 'listepo/stator',
     status: 'research',
-    summary: 'AOT-компилятор TypeScript и JavaScript в нативные бинарники. Исследовательский компилятор.',
+    summary: 'An ahead-of-time compiler from TypeScript and JavaScript to native binaries. A research compiler.',
   },
   {
     name: 'slint_dart',
     repo: 'listepo/slint_dart',
     status: 'active',
-    summary: 'Slint для Flutter: типизированный Dart-кодген из .slint, интерпретатор и AOT поверх Rust FFI, headless- и Patrol-тесты.',
+    summary: 'Slint for Flutter: typed Dart codegen from .slint files, interpreter and AOT backends over Rust FFI, headless and Patrol testing.',
   },
   {
     name: 'bindsmith',
     repo: 'listepo/bindsmith',
     status: 'wip',
-    summary: 'Один bindsmith.yaml — Dart-биндинги к нативным API на всех шести платформах Flutter.',
+    summary: 'One bindsmith.yaml — Dart bindings for native APIs on all six Flutter platforms.',
   },
   {
     name: 'ketch-registry',
     repo: 'pyrlyn/ketch-registry',
     status: 'active',
-    summary: 'Реестр пакетов ketch по умолчанию: одна папка на пакет.',
+    summary: 'The default package registry for ketch: one folder per package.',
   },
   {
     name: 'brand',
     repo: 'pyrlyn/brand',
     status: 'active',
-    summary: 'Бренд-система: дизайн-токены, CSS, компоненты, логотипы и иконки.',
+    summary: 'Brand system: design tokens, CSS, components, logos and icons.',
   },
   {
     name: 'cross-code',
     repo: 'listepo/cross-code',
     status: 'active',
-    summary: 'Код и утилиты для кросс-платформенной разработки: NativeScript, React Native, Ionic и др.',
+    summary: 'Code and utilities for cross-platform development: NativeScript, React Native, Ionic and more.',
   },
 ];
 
 export const statusLabel: Record<Project['status'], string> = {
-  release: 'релиз',
-  active: 'в работе',
+  release: 'released',
+  active: 'active',
   wip: 'wip',
   research: 'research',
 };
@@ -149,21 +149,21 @@ export type Job = {
 export const experience: Job[] = [
   {
     org: 'Pyrlyn',
-    title: 'Основатель и технический директор',
-    period: 'сен 2026 — н. в.',
-    place: 'Европа',
+    title: 'Founder & CTO',
+    period: 'Sep 2026 — present',
+    place: 'Europe',
     url: 'https://github.com/pyrlyn',
     points: [
-      'Основал компанию инструментов для разработчиков; отвечаю за технологии и техническую стратегию.',
-      'Выпустил ketch — установку CLI-инструментов из релизов GitHub с проверкой контрольной суммы — и rtok, который измеримо сокращает контекст AI-агентов.',
-      'Веду разработку runa (local-first AI-раннер) и cox (терминальный агент для программирования).',
+      'Founded a developer-tools company; own its technology and technical strategy.',
+      'Shipped ketch, which installs CLI tools from GitHub releases with checksum verification, and rtok, which measurably cuts the context AI agents carry.',
+      'Leading development of runa (a local-first AI runner) and cox (a terminal coding agent).',
     ],
   },
   {
     org: 'KSF Technologies AG',
     title: 'Senior Frontend Developer',
-    period: 'фев 2022 — н. в.',
-    place: 'Киев',
+    period: 'Feb 2022 — present',
+    place: 'Kyiv',
     points: [
       'Took projects from first mockups to production and supported them after release.',
       'Owned the visual layer and UX of the interfaces, from prototype to final polish.',
@@ -173,7 +173,7 @@ export const experience: Job[] = [
   {
     org: 'Rocket',
     title: 'Front-End Developer',
-    period: 'ноя 2020 — янв 2022',
+    period: 'Nov 2020 — Jan 2022',
     points: [
       'Shipped features to production as part of a product team.',
       'Turned design mockups into working interfaces, down to the details.',
@@ -182,41 +182,41 @@ export const experience: Job[] = [
   {
     org: 'KITCODE',
     title: 'Front-End Technical Lead',
-    period: 'апр 2019 — ноя 2020',
+    period: 'Apr 2019 — Nov 2020',
     points: [
-      'Проектировал архитектуру фронтенда для новых и действующих проектов.',
-      'Вёл проекты на всём цикле — от запуска до поддержки.',
-      'Менторил разработчиков команды.',
+      'Designed frontend architecture for new and existing projects.',
+      'Ran projects through the full cycle, from launch to maintenance.',
+      'Mentored the team’s developers.',
     ],
   },
   {
     org: 'PrivateDev',
     title: 'Senior Frontend Developer → Front-End Technical Lead',
-    period: 'авг 2017 — апр 2019',
+    period: 'Aug 2017 — Apr 2019',
     points: [
-      'Через год вырос из Senior-разработчика до техлида.',
-      'Перепроектировал архитектуру основного проекта и менторил коллег.',
+      'Grew from senior developer to tech lead within a year.',
+      'Redesigned the main project’s architecture and mentored colleagues.',
     ],
   },
   {
     org: 'Logic IT Solutions (LITS)',
     title: 'Senior JavaScript Developer',
-    period: 'май 2016 — авг 2017',
-    place: 'Киев',
-    points: ['Разрабатывал фронтенд нескольких клиентских проектов.'],
+    period: 'May 2016 — Aug 2017',
+    place: 'Kyiv',
+    points: ['Built the frontend for several client projects.'],
   },
   {
     org: 'Mush',
     title: 'Senior JavaScript Developer',
-    period: 'май 2016 — апр 2017',
-    points: ['Разрабатывал гибридное мобильное приложение.'],
+    period: 'May 2016 — Apr 2017',
+    points: ['Built a hybrid mobile app.'],
   },
   {
     org: '111PIX UA',
     title: 'Full-stack Developer',
-    period: 'ноя 2015 — май 2016',
-    place: 'Киев',
-    points: ['Развивал и поддерживал Battlecam (battlecam.com).'],
+    period: 'Nov 2015 — May 2016',
+    place: 'Kyiv',
+    points: ['Developed and maintained Battlecam (battlecam.com).'],
   },
 ];
 
@@ -227,5 +227,5 @@ export const earlier = [
   { org: 'N1 Financial Company', title: 'Software Engineer', period: '2014 — 2015' },
   { org: 'Skiliks', title: 'PHP/JS Developer', period: '2012 — 2014' },
   { org: 'TizerClick', title: 'PHP Developer', period: '2011 — 2012' },
-  { org: 'Фриланс', title: 'Full Stack Engineer', period: '2009 — 2011' },
+  { org: 'Freelance', title: 'Full Stack Engineer', period: '2009 — 2011' },
 ];

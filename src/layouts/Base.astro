@@ -1,6 +1,5 @@
 ---
-import '@fontsource-variable/geist';
-import '@fontsource-variable/geist-mono';
+import '../styles/fonts.css';
 import '../styles/global.css';
 import { site, person } from '../data/cv';
 
@@ -19,7 +18,7 @@ const jsonLd = {
 };
 ---
 <!doctype html>
-<html lang="ru">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -32,7 +31,7 @@ const jsonLd = {
 
     <meta property="og:type" content="profile" />
     <meta property="og:site_name" content={site.domain} />
-    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={site.title} />
     <meta property="og:description" content={site.description} />
@@ -45,7 +44,7 @@ const jsonLd = {
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
-    <a class="skip-link" href="#main">Перейти к содержимому</a>
+    <a class="skip-link" href="#main">Skip to content</a>
     <div class="backdrop" aria-hidden="true"></div>
     <canvas class="rain" id="rain" aria-hidden="true"></canvas>
     <div class="scanlines" aria-hidden="true"></div>

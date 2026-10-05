@@ -24,14 +24,14 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
     <section id="about" class="section container-x reveal" aria-labelledby="about-title">
       <div class="section-head">
         <Prompt num="01" cmd="cat about.md" />
-        <h2 id="about-title" class="section-title" data-glitch>Обо мне</h2>
+        <h2 id="about-title" class="section-title" data-glitch>About</h2>
       </div>
       <div class="about">
         <div class="about__text">
           {about.map((p) => <p>{p}</p>)}
           
         </div>
-        <aside class="pane about__facts" aria-label="Коротко">
+        <aside class="pane about__facts" aria-label="At a glance">
           <div class="pane__tab"><b>profile.toml</b><span>toml</span></div>
           <dl class="kv mono">
             {facts.map((f, i) => (
@@ -50,8 +50,8 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
     <section id="experience" class="section container-x reveal" aria-labelledby="exp-title">
       <div class="section-head">
         <Prompt num="02" cmd="git log --author=ivan --oneline" />
-        <h2 id="exp-title" class="section-title" data-glitch>Опыт</h2>
-        <p class="section-lede">В разработке с 2009 года: от фриланса и full-stack до техлида фронтенда и собственной компании.</p>
+        <h2 id="exp-title" class="section-title" data-glitch>Experience</h2>
+        <p class="section-lede">Building software since 2009: from freelance and full-stack work to frontend tech lead and my own company.</p>
       </div>
       <ol class="log pane">
         {experience.map((j) => (
@@ -68,7 +68,7 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
         <li class="log__item log__item--earlier">
           <span class="log__hash mono" aria-hidden="true">{hash('earlier')}</span>
           <div class="log__body">
-            <h3 class="log__title log__title--sm">Ранее · 2009 — 2015</h3>
+            <h3 class="log__title log__title--sm">Earlier · 2009 — 2015</h3>
             <ul class="earlier">
               {earlier.map((e) => (
                 <li><span class="earlier__org">{e.org}</span><span class="earlier__title">{e.title}</span><span class="earlier__period mono">{e.period}</span></li>
@@ -83,8 +83,8 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
     <section id="projects" class="section container-x reveal" aria-labelledby="projects-title">
       <div class="section-head">
         <Prompt num="03" cmd="ls -la ~/projects" />
-        <h2 id="projects-title" class="section-title" data-glitch>Проекты</h2>
-        <p class="section-lede">Основные — CLI и AI-инструменты Pyrlyn. Ниже — остальные открытые репозитории.</p>
+        <h2 id="projects-title" class="section-title" data-glitch>Projects</h2>
+        <p class="section-lede">The main ones are Pyrlyn’s CLI and AI tools. Below are the rest of my open repositories.</p>
       </div>
 
       <ul class="featured" role="list">
@@ -100,7 +100,7 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
               <div class="project__foot mono">
                 <code class="project__cmd"><span class="text-accent">❯</span> {p.cmd}</code>
                 <a class="project__link" href={`https://github.com/${p.repo}`} target="_blank" rel="noopener">
-                  <span class="sr-only">{p.name} на GitHub (откроется в новой вкладке)</span><span aria-hidden="true">{p.repo} ↗</span>
+                  <span class="sr-only">{p.name} on GitHub (opens in a new tab)</span><span aria-hidden="true">{p.repo} ↗</span>
                 </a>
               </div>
             </div>
@@ -108,7 +108,7 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
         ))}
       </ul>
 
-      <div class="pane ls" role="region" aria-label="Остальные репозитории">
+      <div class="pane ls" role="region" aria-label="Other repositories">
         <div class="pane__tab"><b>~/projects</b><span>{rest.length} entries</span></div>
         <ul role="list">
           {rest.map((p) => (
@@ -129,8 +129,8 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
     <section id="contact" class="section container-x reveal" aria-labelledby="contact-title">
       <div class="section-head">
         <Prompt num="04" cmd="cat contacts" />
-        <h2 id="contact-title" class="section-title" data-glitch>Связаться</h2>
-        <p class="section-lede">Открыт к предложениям. Быстрее всего — почта.</p>
+        <h2 id="contact-title" class="section-title" data-glitch>Contact</h2>
+        <p class="section-lede">Open to offers. Email is the fastest way to reach me.</p>
       </div>
       <ul class="contact pane" role="list">
         {links.map((l) => (
@@ -139,7 +139,7 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
               <span class="contact__key mono">{l.label.toLowerCase()}</span>
               <span class="contact__val mono">{l.value}</span>
               <span class="contact__arrow" aria-hidden="true">{l.id === 'email' ? '→' : '↗'}</span>
-              {l.id !== 'email' && <span class="sr-only">(откроется в новой вкладке)</span>}
+              {l.id !== 'email' && <span class="sr-only">(opens in a new tab)</span>}
             </a>
           </li>
         ))}
