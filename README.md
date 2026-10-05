@@ -1,6 +1,6 @@
 # listepo.dev — CV
 
-One-page CV / business card for Ivan Tuhai. Astro 5 + Tailwind 4 + OGL.
+One-page CV / business card for Ivan Tuhai. Astro 5 + Tailwind 4 + OGL, Geist Mono, digital-rain background.
 
 ```sh
 npm i

@@ -1,7 +1,7 @@
 ---
-interface Props { cmd: string; path?: string; id?: string }
-const { cmd, path = '~/ivan' } = Astro.props;
+interface Props { cmd: string; path?: string; num?: string }
+const { cmd, path = '~/ivan', num } = Astro.props;
 ---
 <p class="prompt">
-  <span class="prompt__path">{path}</span><span class="prompt__sigil" aria-hidden="true">$</span><span class="prompt__cmd">{cmd}</span>
+  {num && <span class="prompt__num">{num}</span>}<span class="prompt__path">{path}</span><span class="prompt__sigil" aria-hidden="true">❯</span><span class="prompt__cmd">{cmd}</span>
 </p>

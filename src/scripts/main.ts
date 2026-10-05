@@ -1,7 +1,17 @@
+import { mountRain } from './rain';
+import { mountGlitch } from './glitch';
+
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
 
-// 1. Lazy WebGL hero (CSS cube stays as fallback)
+// 0. Digital rain (after fonts so glyph metrics are stable)
+const rain = document.querySelector<HTMLCanvasElement>('#rain');
+if (rain) document.fonts.ready.then(() => mountRain(rain, { reduceMotion }));
+
+// 0b. Rare heading glitches
+mountGlitch({ reduceMotion });
+
+// 1. Lazy WebGL hero (CSS globe stays as fallback)
 const host = document.querySelector<HTMLElement>('#hero-3d');
 if (host) {
   const probe = document.createElement('canvas');
@@ -20,9 +30,9 @@ if (host) {
   }
 }
 
-// 2. Perspective tilt on cards
+// 2. Perspective tilt on panes
 document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((el) => {
-  const max = Number(el.dataset.tilt) || 5;
+  const max = Number(el.dataset.tilt) || 4;
   el.addEventListener('pointermove', (e) => {
     if (reduceMotion.matches || !finePointer.matches) return;
     const r = el.getBoundingClientRect();

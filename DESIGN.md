@@ -1,110 +1,121 @@
 # listepo.dev — CV / business card · Design system
 
-One-page personal site for Ivan Tuhai (`listepo`, org `pyrlyn`). UI copy is Russian; code identifiers are English.
-Stack: Astro 5 (static) + Tailwind 4 (`@tailwindcss/vite`) + OGL (lazy hero only). Self-hosted fonts via Fontsource.
+One-page personal site for Ivan Tuhai (`listepo`). UI copy is Russian; code identifiers are English.
+Stack: Astro 5 (static) + Tailwind 4 (`@tailwindcss/vite`) + OGL (lazy hero only). Self-hosted Geist / Geist Mono via Fontsource.
 
 Run: `npm i && npm run dev` (http://localhost:4321) · `npm run build` → `dist/` · `npm run preview`.
+
+## 0. Identity
+
+A personal identity, deliberately **distinct from the Pyrlyn brand** (Pyrlyn = blue `#4c8dff` / mint `#5ee3a1` / teal `#3ee6c4`, IBM Plex Mono + JetBrains Mono, glass pill nav, `>_` mark).
+The CV uses **warm off-white on warm near-black with one signal colour — lime `#c8f031`**, Geist Mono for display, a flat hairline top bar, sharp editor-pane cards, a block-cursor wordmark (`ivan tuhai▌`), a dot-matrix globe in the hero and Matrix-style digital rain in the background. Pyrlyn products appear only as projects, in the CV's own style.
 
 ## 1. Section structure
 
 | # | id | Prompt header | Content |
 |---|---|---|---|
-| — | nav | `>_ listepo.dev` | Sticky glass pill: logo, about/stack/projects/experience, `contact` button. Active link via IntersectionObserver (`aria-current`). |
-| 1 | `#top` hero | `~/ivan $ whoami` | Name (h1, mono display), `listepo · engineer`, "open to work" pill, motto, 2 CTAs, stack chips. Stage: lazy OGL glass cube (CSS-3D cube fallback), floating glass terminal (`ls ~/pyrlyn`), `>_ pyrlyn` badge, mouse parallax. |
-| 2 | `#about` | `cat about.md` | 3 paragraphs + `profile.toml` key/value card. Location = TODO. |
-| 3 | `#stack` | `ls ~/stack` | 4 cards (languages / ui / ai / tooling) with chips. |
-| 4 | `#projects` | `ls -la ~/projects` | 4 featured Pyrlyn products as tilt cards (name, status, summary, `$ cmd`, repo link) + `ls -la`-style list of other repos. |
-| 5 | `#experience` | `git log --author=ivan --oneline` | Commit-log timeline; entries are TODO placeholders; root commit "GitHub since 2012". |
-| 6 | `#contact` | `cat contacts` | Glass panel: GitHub, Pyrlyn, X, LinkedIn rows; Email/Telegram disabled TODO rows. |
-| — | footer | `>_ listepo.dev` | © year, pyrlyn link, `cd ~ ↑` back-to-top. |
+| — | top bar | `ivan tuhai▌` | Sticky flat bar (94% opaque bg, 1px bottom hairline). Numbered mono links `01 about … 05 contact`; lime underline on hover/active. Mobile: only `05 contact`. |
+| 1 | `#top` hero | `~/ivan ❯ whoami` | Name (h1, glitch target), `@listepo / engineer`, lime "открыт к предложениям" tag, motto, primary + outline CTA, stack tags. Stage: dark radial scrim, lazy OGL dot-matrix globe with orbit ring (CSS dotted-sphere fallback), floating frosted `zsh ~/projects` pane. |
+| 2 | `#about` | `01 ~/ivan ❯ cat about.md` | 3 paragraphs + `profile.toml` pane with line numbers. Location = TODO. |
+| 3 | `#stack` | `02 … ls ~/stack` | One pane split into 4 columns (languages / ui / ai / tooling) with tags. |
+| 4 | `#projects` | `03 … ls -la ~/projects` | 4 featured tilt panes (index, name, status, summary, `❯ cmd`, `owner/repo ↗`) + `ls -la` pane of other repos. |
+| 5 | `#experience` | `04 … git log --author=ivan --oneline` | One pane as a git-log table: hash · role @ org · note · period. TODO placeholders; root "init" row 2012. |
+| 6 | `#contact` | `05 … cat contacts` | One pane, 2-column rows: github, pyrlyn, x, linkedin; email/telegram disabled TODO rows. |
+| — | footer | `listepo.dev▌` | © year Ivan Tuhai, `cd ~ ↑`. |
 
-Heading semantics: one `h1` (name), `h2` per section, `h3` per project/job.
+Heading semantics: one `h1`, `h2` per section, `h3` per project/job. Glitch targets: h1 + every h2 (`data-glitch`).
 
 ## 2. Visual system tokens
 
-### Colour (dark only, `color-scheme: dark`)
-Contrast = WCAG ratio vs `--bg #0a0c0f` / vs `--surface #151a20`.
+### Colour
+Contrast = WCAG ratio. "Rain peak" = worst case behind text: brightest rain glyph composited over `--bg` (desktop reading column ≈ 7% lime `#181a0c`; mobile ≈ 17% lime `#2b3110`).
 
-| Token | Hex | vs bg | vs surface | Use |
-|---|---|---|---|---|
-| `--bg` | `#0a0c0f` | — | — | Page |
-| `--bg-elev` | `#101318` | — | — | Card gradient bottom |
-| `--surface` | `#151a20` | — | — | Card gradient top |
-| `--surface-2` | `#1b2128` | — | — | Raised inner |
-| `--line` | `rgb(255 255 255 / .08)` | — | — | Hairlines |
-| `--line-strong` | `rgb(255 255 255 / .14)` | — | — | Borders on chips/ghost buttons |
-| `--fg` | `#e6eaee` | 16.20 | 14.47 | Body text |
-| `--fg-strong` | `#f6f8fa` | 18.39 | 16.43 | Headings |
-| `--muted` | `#9aa5b1` | 7.82 | 6.99 | Secondary text |
-| `--subtle` | `#808b97` | 5.65 | 5.05 | Labels, meta (AA for small text) |
-| `--accent` | `#6ee7a8` | 12.74 | 11.38 | Prompt path, focus ring, primary button, status "release" |
-| `--accent-ink` | `#06140c` | 12.27 on accent | — | Text on accent fill |
-| `--accent-2` | `#f2c46d` | 12.02 | 10.74 | Warm: numbers, commit hashes, wip/research, TODO markers |
-| info (status active) | `#8fc8ff` | 11.07 | 9.89 | Dir names, status "active" (nod to Pyrlyn landing `#7cc4ff`) |
-| `--danger` | `#ff7a7a` | 7.76 | 6.93 | Reserved for errors (not used on the page yet) |
+| Token | Hex | vs bg | vs surface `#141311` | vs surface-2 | rain peak desktop / mobile | Use |
+|---|---|---|---|---|---|---|
+| `--bg` | `#0b0a09` | — | — | — | — | Page (warm near-black) |
+| `--bg-elev` | `#110f0e` | — | — | — | — | Tags |
+| `--surface` | `#141311` | — | — | — | — | Panes |
+| `--surface-2` | `#1c1a17` | — | — | — | — | Raised inner |
+| `--line` | `rgb(236 231 223 / .09)` | — | — | — | — | Hairlines |
+| `--line-strong` | `rgb(236 231 223 / .18)` | — | — | — | — | Tag/outline borders, dashed dividers |
+| `--fg` | `#ece7df` | 16.07 | 15.09 | 14.11 | 14.32 / 11.01 | Body (warm off-white) |
+| `--fg-strong` | `#faf7f2` | 18.51 | 17.38 | 16.25 | — | Headings |
+| `--muted` | `#a8a198` | 7.74 | 7.26 | 6.79 | 6.89 / 5.30 | Secondary text |
+| `--subtle` | `#9a948b` | 6.58 | 6.20 | 5.77 | 5.86 / 4.51 | Labels, line numbers |
+| `--accent` (lime) | `#c8f031` | 15.04 | 14.12 | 13.20 | 13.39 / 10.30 | Prompt sigil, cursor, primary button, status "release", hashes, rain |
+| `--accent-hover` | `#d8f75e` | — | — | — | — | Primary hover (ink 16.38) |
+| `--accent-ink` | `#0b0a09` | 15.04 on lime | — | — | — | Text on lime |
+| `--accent-soft` | `rgb(200 240 49 / .10)` | — | — | — | — | Row hover |
+| `--accent-line` | `rgb(200 240 49 / .45)` | — | — | — | — | TODO border, link underline, orbit |
+| `--danger` | `#ff6a4d` | 6.99 | 6.56 | 6.14 | — | State only + glitch red channel |
 
-Palette rationale: graphite neutrals + terminal-phosphor mint + amber. Distinct from Pyrlyn landing (blue `#7cc4ff` / warm `#f5b454`) and rtok, but shares the cool-dark base and warm secondary. No purple gradients. Accents live in light (borders, glows, text), never in large surfaces. Status never by colour alone (always a text label).
+Rules: lime is the only hue; everything else is warm neutral. No mint, amber, cyan, teal, blue or purple. Status uses glyph + label (`● релиз`, `◐ в работе`, `◌ wip/research`), never colour alone.
 
 ### Typography
-- Display / UI / code: **JetBrains Mono Variable** (`--font-mono`), `calt` + slashed zero.
-- Body: **Inter Variable** (`--font-sans`), line-height 1.6, paragraphs ≤ 40rem.
+- Display / UI / code: **Geist Mono Variable** (`--font-mono`), `zero` + `ss01`.
+- Body: **Geist Variable** (`--font-sans`), line-height 1.6, ≤ 40rem. Both include Cyrillic.
 
 | Token | Size | Use |
 |---|---|---|
-| `--text-display` | `clamp(2.5rem, 1.4rem + 4.6vw, 4.75rem)` (40→76) | h1, mono 700, tracking −0.05em, lh 1.0 |
-| `--text-2xl` | `clamp(1.75rem, 1.2rem + 1.8vw, 2.5rem)` (28→40) | h2, mono 600, −0.03em, lh 1.15 |
-| `--text-xl` | 1.375rem (22) | Project name |
-| `--text-lg` | 1.125rem (18) | Lede, about text, job title |
-| `--text-base` | 1rem (16) | Body |
-| `--text-sm` | 0.875rem (14) | Prompts, buttons, list rows |
-| `--text-xs` | 0.75rem (12) | Chips, labels, status |
+| `--text-display` | `clamp(2.75rem, 1.4rem + 5.4vw, 5.5rem)` (44→88) | h1, mono 600, −0.06em, lh .98 |
+| `--text-2xl` | `clamp(1.75rem, 1.2rem + 1.8vw, 2.5rem)` (28→40) | h2, mono 600, −0.035em |
+| `--text-xl` | 1.375rem | Project name |
+| `--text-lg` | 1.125rem | Lede, about, job title |
+| `--text-base` | 1rem | Body |
+| `--text-sm` | .875rem | Prompts, nav, buttons, rows |
+| `--text-xs` | .75rem | Tags, labels, status, hashes |
 
-### Spacing (4pt base, 8pt rhythm)
-`--space-1…32` = 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96, 128 px. Container 1120px, gutters 20px (<768) / 32px. Section padding 80px (mobile) / 96px.
+### Spacing
+4pt base: `--space-1…32` = 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96, 128 px. Container 1120px; gutters 20 / 32px; sections 80 / 96px.
 
-### Radii
-`--radius-xs 4` (focus, TODO tag) · `sm 8` (nav links) · `md 12` (buttons, terminal, contact rows) · `lg 16` (cards, nav) · `xl 24` (contact panel) · `full` (chips, pills).
+### Radii (sharp, editor-like)
+`--radius-xs 2` (focus, TODO) · `sm 4` (tags, status tag) · `md 6` (buttons) · `lg 8` (panes) · `full` (dots only).
 
 ### Elevation
-| Token | Value | Use |
-|---|---|---|
-| `--highlight` | `inset 0 1px 0 rgb(255 255 255 / .07)` | Top lip on every raised surface |
-| `--shadow-sm` | 2 layers | Cards at rest |
-| `--shadow-md` | 3 layers | Nav, glass panels |
-| `--shadow-lg` | 4 layers | Hovered cards, floating hero layers |
-| `--glow` | accent ring + −12px spread glow | Primary CTA |
-| Glass | `--glass-bg` 7%→2% white, `--glass-border` 11%, blur 14px saturate 140% | Nav, hero terminal/badge, contact panel |
-| Glass fallback | `--glass-opaque #12161b` | `prefers-reduced-transparency` and no `backdrop-filter` |
+| Token | Use |
+|---|---|
+| `--highlight` `inset 0 1px 0 rgb(255 250 240 / .05)` | Top lip on panes |
+| `--shadow-sm` (2 layers) | Panes at rest |
+| `--shadow-md` (3 layers) | — reserved (popovers) |
+| `--shadow-lg` (4 layers) | Hovered project panes, hero frosted pane |
+| `--ring-accent` | 1px lime ring (reserved) |
+| Frost (hero pane only) | `rgb(20 19 17 / .72)` + blur 12px; opaque `#141311` under `prefers-reduced-transparency` or no `backdrop-filter` |
 
 ### Motion
-`--ease-out cubic-bezier(.22,1,.36,1)`; `--dur-fast 150ms` (colour), `--dur-base 300ms` (lift, borders), `--dur-slow 600ms` (tilt settle).
-- Hero: WebGL cube rotation (~0.22 rad/s) + pointer lerp; floating layers 8–9s `--float` ±10px; mouse parallax depth 14/34/48px.
-- Cards: perspective(900px) tilt ≤ 4°, lift −4px; content `translateZ(24px)`.
-- Sections: CSS `animation-timeline: view()` reveal, progressive.
-- `prefers-reduced-motion: reduce`: all animation/transition ≈ 0, no tilt/parallax, WebGL renders one static frame, CSS cube stops.
-- WebGL loop pauses offscreen (IntersectionObserver) and on hidden tab; DPR ≤ 2; chunk loaded via dynamic `import()` on idle only when WebGL exists (15 KB gzip).
+`--ease-out cubic-bezier(.22,1,.36,1)`; `--dur-fast 150` · `--dur-base 300` · `--dur-slow 600` ms.
+- **Hero globe** (OGL, `gl.POINTS`): 1500 sphere points + 240 orbit points (900 + 160 on small stages), square pixels, depth-faded, ~10% twinkle in lime; rotation 0.12 rad/s + pointer lerp. DPR ≤ 2, paused offscreen / hidden tab, static frame under reduced motion. Chunk ≈ 15 KB gzip, dynamic `import()` on idle.
+- **Digital rain** (`#rain`, 2D canvas, fixed, `pointer-events: none`, `aria-hidden`): code snippets (`fn main()`, `Ok(())`, `=> {}`, `#[derive]`…) mixed with half-width katakana, digits and symbols; lime only. ~30 fps cap, DPR-aware, ≤ 64 columns desktop / ≤ 14 mobile, transparent trails via `destination-out`. Opacity .5 with a horizontal mask (edges 100% → reading column 14%); mobile .18 without mask. Paused when the tab is hidden; reduced motion = one pre-simulated static frame. Hero stage adds a dark radial scrim so the rain recedes behind the globe.
+- **Glitch** (`[data-glitch]`: h1 + h2s): every 4–9 s one visible heading at random; 4 frames over ~260 ms (scramble 55% → 5%, `clip-path` slice jitter ±3px, RGB split via `text-shadow` red/lime). ≤ 1 event per 4 s — far under the 3 flashes/s limit. Scramble lives in an `aria-hidden` overlay; the real text node never changes. Disabled entirely under reduced motion.
+- Panes: perspective(1000px) tilt ≤ 3°, lime rail grows on the left edge, shadow → lg.
+- Hero frosted pane floats ±8px / 9 s; parallax depth 12/30 px (fine pointers only).
+- Sections: CSS `animation-timeline: view()` reveal (progressive).
+- `prefers-reduced-motion`: all CSS animation/transition ≈ 0; no tilt, parallax, glitch; globe + rain static.
 
 ## 3. Component inventory
 
 | Component | Default | Hover | Focus-visible | Disabled |
 |---|---|---|---|---|
-| Nav link | `--muted`, mono 14, 40px tall | `--fg-strong`, 5% white bg | 2px accent outline, offset 3 | — |
-| Button primary | accent fill, `--accent-ink`, 44px min, accent glow | `#8af0bb`, stronger glow | accent outline offset 3 | `aria-disabled`: 45% opacity, no shadow, `not-allowed` |
-| Button ghost | 4% white, `--line-strong` border, highlight | 8% white, border 22% | accent outline | same as primary |
-| Chip | 28px pill, mono 12, 3% white, `--line-strong` | accent-tinted bg + border | (non-interactive) | — |
-| Status | dot + label: release=accent, active=info, wip/research=amber | — | — | — |
-| Prompt header | `path` accent · `$` subtle · `cmd` fg, mono 14 | — | — | — |
-| Card | surface→bg-elev gradient, `--line`, r16, highlight + sm | — | — | — |
-| Project tilt card | card + tilt vars | tilt ≤4°, lift −4px, shadow-lg, border-strong | whole card outlined (`:has(:focus-visible)`); full-card hit area via stretched link | — |
-| ls row (repo list) | grid row, name in info blue, perm/lang columns ≥900px | 3% white bg, name → accent | inset accent outline | — |
-| Commit log item | amber hash, accent node dot, card | — | — | — |
-| Contact row | 56px, 50% bg, `--line` | accent tint, border accent 40%, lift −2px, arrow accent | accent outline | TODO rows: `aria-disabled`, `not-allowed`, amber dashed TODO tag |
-| TODO tag | amber mono, dashed amber border, 8% amber bg | — | — | — |
-| Glass terminal | glass + shadow-lg, title bar dots, `pre` body, blinking cursor (static in reduced motion) | — | — | — |
-| Hero 3D | OGL Box ×2, edge-glow + grid + sweep shader in accent/amber; `aria-hidden` | pointer-driven rotation (fine pointers only) | — | No WebGL → CSS-3D cube |
-| Skip link | hidden above viewport | — | visible top-left, accent fill | — |
+| Top bar link | `NN label`, muted, 44px | fg-strong + lime underline grows | 2px lime outline offset 3 | — |
+| Wordmark | `ivan tuhai` + lime block cursor | — | lime outline | — |
+| Button primary | lime fill, ink text, r6, 44px | `--accent-hover` | lime outline | `aria-disabled`: 45% opacity, `not-allowed` |
+| Button outline | transparent, `--line-strong` border | border → fg, text → fg-strong | lime outline | same |
+| Tag | r4, 26px, bg-elev, line-strong border, mono 12 | — (static) | — | — |
+| Open-to-work tag | lime fill, ink text | — | — | — |
+| Status | glyph + label; release lime, active fg, wip/research muted | — | — | — |
+| Prompt | `NN` subtle · path muted · `❯` lime · cmd fg | — | — | — |
+| Pane | surface, 1px line, r8, highlight + sm; optional 36px tab strip (`file` · meta) | — | — | — |
+| Project tilt pane | pane + index + status + dashed footer | tilt ≤3°, lime left rail, shadow-lg | whole pane outlined (`:has(:focus-visible)`), stretched-link hit area | — |
+| ls row | name fg-strong, perm/lang columns ≥900px | lime-soft bg, name lime | inset lime outline | — |
+| Git-log row | lime hash, title @ org, note, right-aligned period | — | — | — |
+| Contact row | 60px, key subtle, value mono | lime-soft bg, arrow lime + nudge | inset lime outline | TODO rows `aria-disabled`, `not-allowed` |
+| TODO tag | dashed lime border, diagonal lime stripes, fg text | — | — | — |
+| Frosted hero pane | frost + shadow-lg, `zsh` tab, `pre` listing, blinking block cursor | — | — | opaque under reduced transparency |
+| Hero globe | OGL points, `aria-hidden` | pointer rotation (fine pointers) | — | No WebGL → CSS dotted sphere + orbit |
+| Digital rain | fixed canvas behind content | — | — | reduced motion → static; forced colours → hidden |
+| Glitch overlay | hidden | — | — | reduced motion → never runs |
+| Skip link | off-screen | — | visible, lime fill | — |
 
-Hit targets: all interactive elements ≥ 44px tall (nav links 40px inside a 56px bar). `forced-colors` adds system borders.
+Hit targets ≥ 44px. `forced-colors`: system borders, rain/scanlines hidden.
 
 ## 4. Handoff
 
@@ -112,30 +123,29 @@ Hit targets: all interactive elements ≥ 44px tall (nav links 40px inside a 56p
 ```css
 :root {
   color-scheme: dark;
-  --bg: #0a0c0f; --bg-elev: #101318; --surface: #151a20; --surface-2: #1b2128;
-  --line: rgb(255 255 255 / .08); --line-strong: rgb(255 255 255 / .14);
-  --fg: #e6eaee; --fg-strong: #f6f8fa; --muted: #9aa5b1; --subtle: #808b97;
-  --accent: #6ee7a8; --accent-ink: #06140c; --accent-soft: rgb(110 231 168 / .12);
-  --accent-2: #f2c46d; --info: #8fc8ff; --danger: #ff7a7a;
+  --bg: #0b0a09; --bg-elev: #110f0e; --surface: #141311; --surface-2: #1c1a17;
+  --line: rgb(236 231 223 / .09); --line-strong: rgb(236 231 223 / .18);
+  --fg: #ece7df; --fg-strong: #faf7f2; --muted: #a8a198; --subtle: #9a948b;
+  --accent: #c8f031; --accent-hover: #d8f75e; --accent-ink: #0b0a09;
+  --accent-soft: rgb(200 240 49 / .10); --accent-line: rgb(200 240 49 / .45);
+  --danger: #ff6a4d;
 
-  --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, monospace;
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --text-xs: .75rem; --text-sm: .875rem; --text-base: 1rem; --text-lg: 1.125rem; --text-xl: 1.375rem;
   --text-2xl: clamp(1.75rem, 1.2rem + 1.8vw, 2.5rem);
-  --text-display: clamp(2.5rem, 1.4rem + 4.6vw, 4.75rem);
+  --text-display: clamp(2.75rem, 1.4rem + 5.4vw, 5.5rem);
 
   --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px; --space-6: 24px;
   --space-8: 32px; --space-10: 40px; --space-12: 48px; --space-16: 64px; --space-20: 80px; --space-24: 96px;
 
-  --radius-xs: 4px; --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-xl: 24px; --radius-full: 999px;
+  --radius-xs: 2px; --radius-sm: 4px; --radius-md: 6px; --radius-lg: 8px; --radius-full: 999px;
 
-  --highlight: inset 0 1px 0 0 rgb(255 255 255 / .07);
-  --shadow-sm: 0 1px 1px rgb(0 0 0 / .3), 0 2px 4px rgb(0 0 0 / .24);
-  --shadow-md: 0 1px 1px rgb(0 0 0 / .24), 0 4px 8px rgb(0 0 0 / .24), 0 12px 24px rgb(0 0 0 / .3);
-  --shadow-lg: 0 1px 2px rgb(0 0 0 / .24), 0 8px 16px rgb(0 0 0 / .26), 0 24px 48px rgb(0 0 0 / .34), 0 48px 96px rgb(0 0 0 / .4);
-  --glow: 0 0 0 1px rgb(110 231 168 / .22), 0 12px 40px -12px rgb(110 231 168 / .45);
-  --glass-bg: linear-gradient(180deg, rgb(255 255 255 / .07), rgb(255 255 255 / .02));
-  --glass-border: rgb(255 255 255 / .11); --glass-blur: 14px; --glass-opaque: #12161b;
+  --highlight: inset 0 1px 0 0 rgb(255 250 240 / .05);
+  --shadow-sm: 0 1px 1px rgb(0 0 0 / .4), 0 2px 6px rgb(0 0 0 / .3);
+  --shadow-md: 0 1px 2px rgb(0 0 0 / .4), 0 6px 12px rgb(0 0 0 / .32), 0 16px 32px rgb(0 0 0 / .36);
+  --shadow-lg: 0 1px 2px rgb(0 0 0 / .4), 0 10px 20px rgb(0 0 0 / .34), 0 28px 56px rgb(0 0 0 / .42), 0 56px 112px rgb(0 0 0 / .46);
+  --frost-bg: rgb(20 19 17 / .72); --frost-blur: 12px; --frost-opaque: #141311;
 
   --ease-out: cubic-bezier(.22, 1, .36, 1); --dur-fast: 150ms; --dur-base: 300ms; --dur-slow: 600ms;
 }
@@ -148,20 +158,20 @@ Hit targets: all interactive elements ≥ 44px tall (nav links 40px inside a 56p
   --color-bg: var(--bg); --color-bg-elev: var(--bg-elev);
   --color-surface: var(--surface); --color-surface-2: var(--surface-2); --color-line: var(--line);
   --color-fg: var(--fg); --color-fg-strong: var(--fg-strong); --color-muted: var(--muted); --color-subtle: var(--subtle);
-  --color-accent: var(--accent); --color-accent-ink: var(--accent-ink); --color-accent-2: var(--accent-2);
-  --color-danger: var(--danger);
+  --color-accent: var(--accent); --color-accent-ink: var(--accent-ink); --color-danger: var(--danger);
   --font-mono: var(--font-mono); --font-sans: var(--font-sans);
-  --radius-sm: var(--radius-sm); --radius-md: var(--radius-md); --radius-lg: var(--radius-lg); --radius-xl: var(--radius-xl);
+  --radius-sm: var(--radius-sm); --radius-md: var(--radius-md); --radius-lg: var(--radius-lg);
   --shadow-sm: var(--shadow-sm); --shadow-md: var(--shadow-md); --shadow-lg: var(--shadow-lg);
   --ease-out: var(--ease-out);
 }
 ```
-Usage: `bg-surface text-fg border-line rounded-lg shadow-md font-mono text-accent`.
 
 ### Notes
-- Content lives in `src/data/cv.ts`; every `TODO:` string renders as an amber TODO tag.
+- Content lives in `src/data/cv.ts`; every `TODO:` string renders as a TODO tag.
 - `og:image` is still TODO (1200×630 PNG at `/og.png`).
 - Name: English spelling is "Ivan Tuhai" (confirmed by Ivan). The LinkedIn URL slug is kept as-is.
+- `window.__cvGlitch(selector)` freezes a glitch frame — used only for review screenshots.
+- Body has no background on purpose (html paints `--bg`), otherwise the fixed rain/backdrop layers at negative z-index would be covered.
 
 ## 5. Content sources
 - `gh api users/listepo` (name, hireable, created 2012, X handle, public repo count), `gh api users/listepo/repos`, `gh repo list pyrlyn`, `gh api orgs/pyrlyn`.
