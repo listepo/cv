@@ -1,0 +1,261 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Prompt from '../components/Prompt.astro';
+import { about, facts, stack, projects, statusLabel, experience, links, contactTodos, person, site } from '../data/cv';
+
+const featured = projects.filter((p) => p.featured);
+const rest = projects.filter((p) => !p.featured);
+const year = new Date().getFullYear();
+---
+<Base>
+  <Nav />
+  <main id="main">
+    <Hero />
+
+    <!-- about -->
+    <section id="about" class="section container-x reveal" aria-labelledby="about-title">
+      <Prompt cmd="cat about.md" />
+      <h2 id="about-title" class="section-title">Обо мне</h2>
+      <div class="about">
+        <div class="about__text">
+          {about.map((p) => <p>{p}</p>)}
+          <p class="text-sm text-muted">Локация: <span class="todo">{person.location}</span></p>
+        </div>
+        <aside class="card about__facts" aria-label="Коротко">
+          <p class="file-label mono">profile.toml</p>
+          <dl class="kv mono">
+            {facts.map((f) => (
+              <div><dt>{f.key}</dt><dd><span class="text-subtle">=</span> <span class={/^\d+$|true/.test(f.value) ? 'text-accent-2' : 'text-accent'}>{/^\d+$|true/.test(f.value) ? f.value : `"${f.value}"`}</span></dd></div>
+            ))}
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <!-- stack -->
+    <section id="stack" class="section container-x reveal" aria-labelledby="stack-title">
+      <Prompt cmd="ls ~/stack" />
+      <h2 id="stack-title" class="section-title">Стек</h2>
+      <p class="section-lede">Языки и инструменты, на которых написаны мои проекты.</p>
+      <div class="stack">
+        {stack.map((g) => (
+          <div class="card stack__group">
+            <p class="file-label mono">{g.group}/</p>
+            <ul class="stack__items">{g.items.map((i) => <li class="chip">{i}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- projects -->
+    <section id="projects" class="section container-x reveal" aria-labelledby="projects-title">
+      <Prompt cmd="ls -la ~/projects" />
+      <h2 id="projects-title" class="section-title">Проекты</h2>
+      <p class="section-lede">Флагманы — продукты Pyrlyn на Rust. Ниже — остальные открытые репозитории.</p>
+
+      <ul class="featured" role="list">
+        {featured.map((p) => (
+          <li class="card tilt project" data-tilt="4">
+            <div class="tilt__lift">
+              <div class="project__head">
+                <h3 class="project__name mono"><span class="text-subtle">pyrlyn/</span>{p.name}</h3>
+                <span class={`status status--${p.status}`}>{statusLabel[p.status]}</span>
+              </div>
+              <p class="project__summary">{p.summary}</p>
+              <div class="project__foot mono">
+                <code class="project__cmd"><span class="text-accent">$</span> {p.cmd}</code>
+                <a class="project__link" href={`https://github.com/${p.repo}`} target="_blank" rel="noopener">
+                  <span class="sr-only">{p.name} на GitHub (откроется в новой вкладке)</span><span aria-hidden="true">repo ↗</span>
+                </a>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <div class="card ls" role="region" aria-label="Остальные репозитории">
+        <div class="ls__bar mono"><span>~/projects</span><span class="text-subtle">{rest.length} entries</span></div>
+        <ul role="list">
+          {rest.map((p) => (
+            <li>
+              <a class="ls__row" href={`https://github.com/${p.repo}`} target="_blank" rel="noopener">
+                <span class="ls__perm mono" aria-hidden="true">drwxr-xr-x</span>
+                <span class="ls__name mono">{p.name}/</span>
+                <span class="ls__lang mono">{p.lang}</span>
+                <span class="ls__desc">{p.summary}</span>
+                <span class={`status status--${p.status} ls__status`}>{statusLabel[p.status]}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- experience -->
+    <section id="experience" class="section container-x reveal" aria-labelledby="exp-title">
+      <Prompt cmd="git log --author=ivan --oneline" />
+      <h2 id="exp-title" class="section-title">Опыт</h2>
+      <p class="section-lede">История работы пока не заполнена — места для данных помечены <span class="todo">TODO</span>.</p>
+      <ol class="log">
+        {experience.map((j, i) => (
+          <li class="log__item">
+            <span class="log__hash mono" aria-hidden="true">{['a1f3c9e', '7d20b4f', '3e9c01a'][i] ?? '0000000'}</span>
+            <div class="card log__card">
+              <p class="log__period mono"><span class={j.period.startsWith('TODO') ? 'todo' : ''}>{j.period}</span></p>
+              <h3 class="log__title">
+                <span class={j.title.startsWith('TODO') ? 'todo' : ''}>{j.title}</span>
+                <span class="text-subtle"> @ </span>
+                <span class={j.org.startsWith('TODO') ? 'todo' : ''}>{j.org}</span>
+              </h3>
+              <p class="log__note"><span class={j.note.startsWith('TODO') ? 'todo' : ''}>{j.note}</span></p>
+            </div>
+          </li>
+        ))}
+        <li class="log__item log__item--root">
+          <span class="log__hash mono" aria-hidden="true">0c0ffee</span>
+          <p class="mono text-sm text-muted">init: аккаунт на GitHub · {person.githubSince}</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- contact -->
+    <section id="contact" class="section container-x reveal" aria-labelledby="contact-title">
+      <div class="contact glass">
+        <Prompt cmd="cat contacts" />
+        <h2 id="contact-title" class="section-title">Связаться</h2>
+        <p class="section-lede">Открыт к предложениям. Проще всего — написать в X, LinkedIn или открыть issue на GitHub.</p>
+        <ul class="contact__list" role="list">
+          {links.map((l) => (
+            <li>
+              <a class="contact__row" href={l.href} target="_blank" rel="me noopener">
+                <span class="contact__key mono">{l.label}</span>
+                <span class="contact__val mono">{l.value}</span>
+                <span class="contact__arrow" aria-hidden="true">↗</span>
+                <span class="sr-only">(откроется в новой вкладке)</span>
+              </a>
+            </li>
+          ))}
+          {contactTodos.map((c) => (
+            <li>
+              <span class="contact__row contact__row--disabled" aria-disabled="true">
+                <span class="contact__key mono">{c.label}</span>
+                <span class="contact__val"><span class="todo">{c.value}</span></span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer container-x">
+    <p class="mono"><span class="text-accent">&gt;_</span> {site.domain}</p>
+    <p class="mono text-subtle">© {year} {person.name} · <a class="link" href="https://github.com/pyrlyn" target="_blank" rel="noopener">pyrlyn</a> · сделано на Astro</p>
+    <a class="footer__top mono" href="#top">cd ~ <span aria-hidden="true">↑</span></a>
+  </footer>
+</Base>
+
+<script>
+  import '../scripts/main.ts';
+</script>
+
+<style>
+  .section { padding-block: var(--space-20); }
+  @media (min-width: 768px) { .section { padding-block: var(--space-24); } }
+  .file-label { font-size: var(--text-xs); color: var(--subtle); margin-bottom: var(--space-3); }
+
+  /* about */
+  .about { display: grid; gap: var(--space-8); margin-top: var(--space-8); }
+  @media (min-width: 900px) { .about { grid-template-columns: 1.5fr 1fr; gap: var(--space-12); } }
+  .about__text { display: grid; gap: var(--space-4); max-width: 40rem; font-size: var(--text-lg); color: var(--fg); }
+  .about__text p:not(:first-child):not(:last-child) { color: var(--muted); }
+  .about__facts { padding: var(--space-6); align-self: start; }
+  .kv { display: grid; gap: var(--space-2); font-size: var(--text-sm); }
+  .kv div { display: flex; gap: var(--space-2); }
+  .kv dt { color: var(--fg); min-width: 12ch; }
+
+  /* stack */
+  .stack { display: grid; gap: var(--space-4); margin-top: var(--space-8); grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .stack__group { padding: var(--space-5) var(--space-6) var(--space-6); }
+  .stack__items { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+  /* projects */
+  .featured { display: grid; gap: var(--space-4); margin-top: var(--space-8); }
+  @media (min-width: 768px) { .featured { grid-template-columns: repeat(2, 1fr); } }
+  .project { padding: var(--space-6); position: relative; }
+  .project__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+  .project__name { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.02em; }
+  .project__summary { margin-top: var(--space-3); color: var(--muted); font-size: var(--text-base); min-height: 4.8em; }
+  .project__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-top: var(--space-5); padding-top: var(--space-4); border-top: 1px solid var(--line); }
+  .project__cmd { font-size: var(--text-sm); color: var(--fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .project__link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--space-3); margin-right: calc(var(--space-3) * -1); border-radius: var(--radius-sm); font-size: var(--text-sm); color: var(--muted); transition: color var(--dur-fast), background-color var(--dur-fast); }
+  .project__link::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius-lg); }
+  .project__link:hover { color: var(--accent); }
+  .project:has(.project__link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .project__link:focus-visible { outline: none; }
+
+  .ls { margin-top: var(--space-4); overflow: hidden; }
+  .ls__bar { display: flex; justify-content: space-between; padding: var(--space-3) var(--space-5); border-bottom: 1px solid var(--line); font-size: var(--text-xs); color: var(--muted); }
+  .ls__row {
+    display: grid; gap: var(--space-1) var(--space-4); align-items: baseline;
+    grid-template-columns: 1fr auto; grid-template-areas: "name status" "desc desc";
+    padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--line);
+    transition: background-color var(--dur-fast) var(--ease-out);
+  }
+  .ls li:last-child .ls__row { border-bottom: 0; }
+  .ls__row:hover { background: rgb(255 255 255 / .03); }
+  .ls__row:hover .ls__name { color: var(--accent); }
+  .ls__row:focus-visible { outline-offset: -2px; border-radius: 0; }
+  .ls__perm, .ls__lang { display: none; }
+  .ls__name { grid-area: name; color: #8fc8ff; font-size: var(--text-sm); font-weight: 600; transition: color var(--dur-fast); }
+  .ls__desc { grid-area: desc; color: var(--muted); font-size: var(--text-sm); }
+  .ls__status { grid-area: status; }
+  @media (min-width: 900px) {
+    .ls__row { grid-template-columns: 10ch 16ch 10ch 1fr 9ch; grid-template-areas: "perm name lang desc status"; }
+    .ls__perm { display: block; grid-area: perm; color: var(--subtle); font-size: var(--text-xs); }
+    .ls__lang { display: block; grid-area: lang; color: var(--muted); font-size: var(--text-xs); }
+  }
+
+  /* experience */
+  .log { margin-top: var(--space-8); display: grid; gap: var(--space-4); position: relative; }
+  .log::before { content: ""; position: absolute; left: 11px; top: 8px; bottom: 8px; width: 1px; background: var(--line-strong); }
+  .log__item { position: relative; padding-left: var(--space-10); }
+  .log__item::before { content: ""; position: absolute; left: 6px; top: 22px; width: 11px; height: 11px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
+  .log__item--root::before { top: 6px; border-color: var(--subtle); }
+  .log__hash { display: block; font-size: var(--text-xs); color: var(--accent-2); margin-bottom: var(--space-2); }
+  .log__item--root { display: flex; gap: var(--space-3); align-items: baseline; }
+  .log__item--root .log__hash { margin: 0; }
+  .log__card { padding: var(--space-5) var(--space-6); }
+  .log__period { font-size: var(--text-xs); color: var(--muted); }
+  .log__title { margin-top: var(--space-2); font-size: var(--text-lg); font-weight: 600; }
+  .log__note { margin-top: var(--space-2); color: var(--muted); }
+  @media (min-width: 768px) {
+    .log__item:not(.log__item--root) { display: grid; grid-template-columns: 9ch 1fr; gap: var(--space-4); align-items: start; }
+    .log__item:not(.log__item--root) .log__hash { margin-top: 20px; }
+  }
+
+  /* contact */
+  .contact { padding: var(--space-8) var(--space-6); border-radius: var(--radius-xl); position: relative; overflow: hidden; }
+  @media (min-width: 768px) { .contact { padding: var(--space-12); } }
+  .contact::before { content: ""; position: absolute; inset: auto -20% -60% auto; width: 60%; aspect-ratio: 1; background: radial-gradient(closest-side, rgb(110 231 168 / .12), transparent); pointer-events: none; }
+  .contact__list { margin-top: var(--space-8); display: grid; gap: var(--space-2); }
+  @media (min-width: 768px) { .contact__list { grid-template-columns: 1fr 1fr; } }
+  .contact__row {
+    display: flex; align-items: center; gap: var(--space-4); min-height: 56px; padding: 0 var(--space-5);
+    border: 1px solid var(--line); border-radius: var(--radius-md); background: rgb(10 12 15 / .5);
+    transition: border-color var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), translate var(--dur-base) var(--ease-out);
+  }
+  a.contact__row:hover { border-color: rgb(110 231 168 / .4); background: var(--accent-soft); translate: 0 -2px; }
+  .contact__row--disabled { cursor: not-allowed; }
+  .contact__key { min-width: 9ch; font-size: var(--text-xs); color: var(--subtle); }
+  .contact__val { font-size: var(--text-sm); color: var(--fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .contact__arrow { margin-left: auto; color: var(--muted); }
+  a.contact__row:hover .contact__arrow { color: var(--accent); }
+
+  /* footer */
+  .footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-4); padding-block: var(--space-10) var(--space-12); border-top: 1px solid var(--line); font-size: var(--text-sm); color: var(--muted); }
+  .footer__top { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--space-3); border-radius: var(--radius-sm); color: var(--muted); }
+  .footer__top:hover { color: var(--accent); }
+</style>

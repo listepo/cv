@@ -1,0 +1,33 @@
+---
+const items = [
+  { href: '#about', label: 'about' },
+  { href: '#stack', label: 'stack' },
+  { href: '#projects', label: 'projects' },
+  { href: '#experience', label: 'experience' },
+];
+---
+<header class="sticky top-0 z-50 pt-3">
+  <div class="container-x">
+    <nav aria-label="Основная навигация" class="nav glass flex items-center justify-between gap-4 rounded-[var(--radius-lg)] py-2 pl-4 pr-2">
+      <a href="#top" class="flex min-h-11 items-center gap-2 font-mono text-sm font-semibold text-fg-strong" aria-label="listepo — наверх">
+        <span class="text-accent" aria-hidden="true">&gt;_</span>listepo<span class="text-subtle">.dev</span>
+      </a>
+      <ul class="hidden items-center gap-1 md:flex">
+        {items.map((i) => (
+          <li><a class="nav__link" href={i.href}>{i.label}</a></li>
+        ))}
+      </ul>
+      <a class="btn btn--ghost !min-h-10 !px-4" href="#contact">contact</a>
+    </nav>
+  </div>
+</header>
+<style>
+  .nav { box-shadow: var(--highlight), var(--shadow-md); }
+  .nav__link {
+    display: inline-flex; align-items: center; min-height: 40px; padding: 0 12px;
+    border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: var(--text-sm); color: var(--muted);
+    transition: color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+  }
+  .nav__link:hover { color: var(--fg-strong); background: rgb(255 255 255 / .05); }
+  .nav__link[aria-current="true"] { color: var(--fg-strong); }
+</style>
