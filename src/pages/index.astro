@@ -3,11 +3,16 @@ import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
 import Prompt from '../components/Prompt.astro';
-import { about, facts, stack, projects, statusLabel, experience, links, contactTodos, person, site } from '../data/cv';
+import { about, facts, projects, statusLabel, experience, earlier, links, person, site } from '../data/cv';
 
 const featured = projects.filter((p) => p.featured);
 const rest = projects.filter((p) => !p.featured);
 const year = new Date().getFullYear();
+const hash = (str: string) => {
+  let h = 2166136261;
+  for (const ch of str) h = Math.imul(h ^ ch.charCodeAt(0), 16777619);
+  return (h >>> 0).toString(16).padStart(8, '0').slice(0, 7);
+};
 const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
 ---
 <Base>
@@ -24,7 +29,7 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
       <div class="about">
         <div class="about__text">
           {about.map((p) => <p>{p}</p>)}
-          <p class="text-sm text-muted">Локация: <span class="todo">{person.location}</span></p>
+          
         </div>
         <aside class="pane about__facts" aria-label="Коротко">
           <div class="pane__tab"><b>profile.toml</b><span>toml</span></div>
@@ -41,21 +46,37 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
       </div>
     </section>
 
-    <!-- stack -->
-    <section id="stack" class="section container-x reveal" aria-labelledby="stack-title">
+    <!-- experience -->
+    <section id="experience" class="section container-x reveal" aria-labelledby="exp-title">
       <div class="section-head">
-        <Prompt num="02" cmd="ls ~/stack" />
-        <h2 id="stack-title" class="section-title" data-glitch>Стек</h2>
-        <p class="section-lede">Языки и инструменты, на которых написаны мои проекты.</p>
+        <Prompt num="02" cmd="git log --author=ivan --oneline" />
+        <h2 id="exp-title" class="section-title" data-glitch>Опыт</h2>
+        <p class="section-lede">В разработке с 2009 года: от фриланса и full-stack до техлида фронтенда и собственной компании.</p>
       </div>
-      <div class="stack pane">
-        {stack.map((g) => (
-          <div class="stack__group">
-            <p class="stack__label mono">{g.group}/</p>
-            <ul class="stack__items">{g.items.map((i) => <li class="tag">{i}</li>)}</ul>
-          </div>
+      <ol class="log pane">
+        {experience.map((j) => (
+          <li class="log__item">
+            <span class="log__hash mono" aria-hidden="true">{hash(j.org)}</span>
+            <div class="log__body">
+              <h3 class="log__title">{j.title} <span class="text-subtle">@</span> {j.url ? <a class="link" href={j.url} target="_blank" rel="noopener">{j.org}</a> : j.org}</h3>
+              {j.points.length > 0 && <ul class="log__points">{j.points.map((pt) => <li>{pt}</li>)}</ul>}
+              {j.todo && <p class="log__note"><span class="todo">{j.todo}</span></p>}
+            </div>
+            <p class="log__period mono">{j.period}{j.place && <span class="log__place"> · {j.place}</span>}</p>
+          </li>
         ))}
-      </div>
+        <li class="log__item log__item--earlier">
+          <span class="log__hash mono" aria-hidden="true">{hash('earlier')}</span>
+          <div class="log__body">
+            <h3 class="log__title log__title--sm">Ранее · 2009 — 2015</h3>
+            <ul class="earlier">
+              {earlier.map((e) => (
+                <li><span class="earlier__org">{e.org}</span><span class="earlier__title">{e.title}</span><span class="earlier__period mono">{e.period}</span></li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      </ol>
     </section>
 
     <!-- projects -->
@@ -63,7 +84,7 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
       <div class="section-head">
         <Prompt num="03" cmd="ls -la ~/projects" />
         <h2 id="projects-title" class="section-title" data-glitch>Проекты</h2>
-        <p class="section-lede">Основные — CLI и AI-инструменты на Rust. Ниже — остальные открытые репозитории.</p>
+        <p class="section-lede">Основные — CLI и AI-инструменты Pyrlyn. Ниже — остальные открытые репозитории.</p>
       </div>
 
       <ul class="featured" role="list">
@@ -95,7 +116,6 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
               <a class="ls__row" href={`https://github.com/${p.repo}`} target="_blank" rel="noopener">
                 <span class="ls__perm mono" aria-hidden="true">drwxr-xr-x</span>
                 <span class="ls__name mono">{p.name}/</span>
-                <span class="ls__lang mono">{p.lang}</span>
                 <span class="ls__desc">{p.summary}</span>
                 <span class={`status status--${p.status} ls__status`}>{statusLabel[p.status]}</span>
               </a>
@@ -105,60 +125,22 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
       </div>
     </section>
 
-    <!-- experience -->
-    <section id="experience" class="section container-x reveal" aria-labelledby="exp-title">
-      <div class="section-head">
-        <Prompt num="04" cmd="git log --author=ivan --oneline" />
-        <h2 id="exp-title" class="section-title" data-glitch>Опыт</h2>
-        <p class="section-lede">История работы пока не заполнена — места для данных помечены <span class="todo">TODO</span>.</p>
-      </div>
-      <ol class="log pane">
-        {experience.map((j, i) => (
-          <li class="log__item">
-            <span class="log__hash mono" aria-hidden="true">{['a1f3c9e', '7d20b4f', '3e9c01a'][i] ?? '0000000'}</span>
-            <div class="log__body">
-              <h3 class="log__title">
-                <span class={j.title.startsWith('TODO') ? 'todo' : ''}>{j.title}</span>
-                <span class="text-subtle"> @ </span>
-                <span class={j.org.startsWith('TODO') ? 'todo' : ''}>{j.org}</span>
-              </h3>
-              <p class="log__note"><span class={j.note.startsWith('TODO') ? 'todo' : ''}>{j.note}</span></p>
-            </div>
-            <p class="log__period mono"><span class={j.period.startsWith('TODO') ? 'todo' : ''}>{j.period}</span></p>
-          </li>
-        ))}
-        <li class="log__item log__item--root">
-          <span class="log__hash mono" aria-hidden="true">0c0ffee</span>
-          <p class="log__body mono text-sm text-muted">init: аккаунт на GitHub</p>
-          <p class="log__period mono">{person.githubSince}</p>
-        </li>
-      </ol>
-    </section>
-
     <!-- contact -->
     <section id="contact" class="section container-x reveal" aria-labelledby="contact-title">
       <div class="section-head">
-        <Prompt num="05" cmd="cat contacts" />
+        <Prompt num="04" cmd="cat contacts" />
         <h2 id="contact-title" class="section-title" data-glitch>Связаться</h2>
-        <p class="section-lede">Открыт к предложениям. Ссылки на профили — ниже; email и мессенджеры будут добавлены позже.</p>
+        <p class="section-lede">Открыт к предложениям. Быстрее всего — почта.</p>
       </div>
       <ul class="contact pane" role="list">
         {links.map((l) => (
           <li>
-            <a class="contact__row" href={l.href} target="_blank" rel="me noopener">
+            <a class="contact__row" href={l.href} target={l.id === 'email' ? undefined : '_blank'} rel={l.id === 'email' ? undefined : 'me noopener'}>
               <span class="contact__key mono">{l.label.toLowerCase()}</span>
               <span class="contact__val mono">{l.value}</span>
-              <span class="contact__arrow" aria-hidden="true">↗</span>
-              <span class="sr-only">(откроется в новой вкладке)</span>
+              <span class="contact__arrow" aria-hidden="true">{l.id === 'email' ? '→' : '↗'}</span>
+              {l.id !== 'email' && <span class="sr-only">(откроется в новой вкладке)</span>}
             </a>
-          </li>
-        ))}
-        {contactTodos.map((c) => (
-          <li>
-            <span class="contact__row contact__row--disabled" aria-disabled="true">
-              <span class="contact__key mono">{c.label.toLowerCase()}</span>
-              <span class="contact__val"><span class="todo">{c.value}</span></span>
-            </span>
           </li>
         ))}
       </ul>
@@ -191,13 +173,6 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
   .kv__ln { width: 2ch; text-align: right; color: var(--subtle); }
   .kv dt { color: var(--fg); min-width: 12ch; }
 
-  /* stack: one pane, four columns */
-  .stack { display: grid; margin-top: var(--space-8); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-  .stack__group { padding: var(--space-5) var(--space-6) var(--space-6); border-top: 1px solid var(--line); margin-top: -1px; }
-  @media (min-width: 640px) { .stack__group + .stack__group { border-left: 1px solid var(--line); } }
-  .stack__label { font-size: var(--text-xs); color: var(--subtle); margin-bottom: var(--space-3); }
-  .stack__items { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-
   /* projects */
   .featured { display: grid; gap: var(--space-4); margin-top: var(--space-8); }
   @media (min-width: 768px) { .featured { grid-template-columns: repeat(2, 1fr); } }
@@ -226,28 +201,42 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
   .ls__row:hover { background: var(--accent-soft); }
   .ls__row:hover .ls__name { color: var(--accent); }
   .ls__row:focus-visible { outline-offset: -2px; border-radius: 0; }
-  .ls__perm, .ls__lang { display: none; }
+  .ls__perm { display: none; }
   .ls__name { grid-area: name; color: var(--fg-strong); font-size: var(--text-sm); font-weight: 600; transition: color var(--dur-fast); }
   .ls__desc { grid-area: desc; color: var(--muted); font-size: var(--text-sm); }
   .ls__status { grid-area: status; }
   @media (min-width: 900px) {
-    .ls__row { grid-template-columns: 10ch 16ch 10ch 1fr 10ch; grid-template-areas: "perm name lang desc status"; }
+    .ls__row { grid-template-columns: 10ch 16ch 1fr 10ch; grid-template-areas: "perm name desc status"; }
     .ls__perm { display: block; grid-area: perm; color: var(--subtle); font-size: var(--text-xs); }
-    .ls__lang { display: block; grid-area: lang; color: var(--muted); font-size: var(--text-xs); }
   }
 
   /* experience: git-log table inside one pane */
   .log { margin-top: var(--space-8); overflow: hidden; }
   .log__item { display: grid; grid-template-columns: 8ch 1fr; gap: var(--space-1) var(--space-4); padding: var(--space-5) var(--space-6); border-bottom: 1px solid var(--line); }
   .log__item:last-child { border-bottom: 0; }
-  .log__hash { font-size: var(--text-xs); color: var(--accent); padding-top: 4px; }
-  .log__period { grid-column: 2; font-size: var(--text-xs); color: var(--muted); }
+  .log__hash { font-size: var(--text-xs); color: var(--accent); padding-top: 5px; }
+  .log__period { grid-column: 2; grid-row: 1; font-size: var(--text-xs); color: var(--muted); }
+  .log__body { grid-column: 2; }
+  .log__place { color: var(--subtle); }
   .log__title { font-size: var(--text-lg); font-weight: 600; }
-  .log__note { margin-top: var(--space-1); color: var(--muted); }
-  .log__item--root .log__hash { color: var(--subtle); padding-top: 0; }
+  .log__title--sm { font-size: var(--text-base); color: var(--fg); }
+  .log__points { margin-top: var(--space-2); display: grid; gap: var(--space-1); color: var(--muted); max-width: 46rem; }
+  .log__points li { position: relative; padding-left: var(--space-5); }
+  .log__points li::before { content: "–"; position: absolute; left: 0; color: var(--subtle); font-family: var(--font-mono); }
+  .log__note { margin-top: var(--space-2); }
+  .log__item--earlier .log__hash { color: var(--subtle); }
+  .earlier { margin-top: var(--space-3); display: grid; gap: var(--space-2); font-size: var(--text-sm); }
+  .earlier li { display: grid; grid-template-columns: 1fr auto; gap: 0 var(--space-4); }
+  .earlier__org { color: var(--fg); }
+  .earlier__title { grid-column: 1; color: var(--muted); }
+  .earlier__period { grid-column: 2; grid-row: 1; color: var(--subtle); font-size: var(--text-xs); }
   @media (min-width: 768px) {
     .log__item { grid-template-columns: 9ch 1fr auto; }
-    .log__period { grid-column: 3; grid-row: 1; text-align: right; padding-top: 4px; }
+    .log__item > .log__body { grid-column: 2; grid-row: 1; }
+    .log__period { grid-column: 3; grid-row: 1; text-align: right; padding-top: 5px; white-space: nowrap; }
+    .earlier li { grid-template-columns: 16rem 1fr auto; }
+    .earlier__title { grid-column: 2; grid-row: 1; }
+    .earlier__period { grid-column: 3; }
   }
 
   /* contact: list pane, two columns */

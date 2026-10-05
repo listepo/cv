@@ -12,15 +12,16 @@ The CV uses **warm off-white on warm near-black with one signal colour — lime 
 
 ## 1. Section structure
 
+No skills, stack or languages lists anywhere (per Ivan). Order follows a resume: about → experience → projects → contact.
+
 | # | id | Prompt header | Content |
 |---|---|---|---|
-| — | top bar | `ivan tuhai▌` | Sticky flat bar (94% opaque bg, 1px bottom hairline). Numbered mono links `01 about … 05 contact`; lime underline on hover/active. Mobile: only `05 contact`. |
-| 1 | `#top` hero | `~/ivan ❯ whoami` | Name (h1, glitch target), `@listepo / engineer`, lime "открыт к предложениям" tag, motto, primary + outline CTA, stack tags. Stage: dark radial scrim, lazy OGL dot-matrix globe with orbit ring (CSS dotted-sphere fallback), floating frosted `zsh ~/projects` pane. |
-| 2 | `#about` | `01 ~/ivan ❯ cat about.md` | 3 paragraphs + `profile.toml` pane with line numbers. Location = TODO. |
-| 3 | `#stack` | `02 … ls ~/stack` | One pane split into 4 columns (languages / ui / ai / tooling) with tags. |
-| 4 | `#projects` | `03 … ls -la ~/projects` | 4 featured tilt panes (index, name, status, summary, `❯ cmd`, `owner/repo ↗`) + `ls -la` pane of other repos. |
-| 5 | `#experience` | `04 … git log --author=ivan --oneline` | One pane as a git-log table: hash · role @ org · note · period. TODO placeholders; root "init" row 2012. |
-| 6 | `#contact` | `05 … cat contacts` | One pane, 2-column rows: github, pyrlyn, x, linkedin; email/telegram disabled TODO rows. |
+| — | top bar | `ivan tuhai▌` | Sticky flat bar (94% opaque bg, 1px bottom hairline). Numbered mono links `01 about · 02 experience · 03 projects · 04 contact`; lime underline on hover/active. Mobile: only `04 contact`. |
+| 1 | `#top` hero | `~/ivan ❯ whoami` | Name (h1, glitch target), `@listepo / основатель и технический директор Pyrlyn`, lime "открыт к предложениям" tag, motto, primary + outline CTA. Stage: dark radial scrim, lazy OGL dot-matrix globe with orbit ring (CSS fallback), floating frosted `zsh ~/projects` pane. |
+| 2 | `#about` | `01 ~/ivan ❯ cat about.md` | 3 paragraphs (career arc, tech-lead track, current roles) + `profile.toml` pane: role, location (country only), dev_since, handle, open_to_work. |
+| 3 | `#experience` | `02 … git log --author=ivan --oneline` | One pane as a git-log: hash · title @ org · impact bullets · period · city. 8 detailed roles (Pyrlyn → 111PIX UA) + compact "Ранее · 2009 — 2015" table (6 roles). |
+| 4 | `#projects` | `03 … ls -la ~/projects` | 4 featured tilt panes (ketch, rtok, runa, cox) + `ls -la` pane of other repos (no language column). |
+| 5 | `#contact` | `04 … cat contacts` | One pane, 2-column rows: email (mailto), linkedin, github, x. |
 | — | footer | `listepo.dev▌` | © year Ivan Tuhai, `cd ~ ↑`. |
 
 Heading semantics: one `h1`, `h2` per section, `h3` per project/job. Glitch targets: h1 + every h2 (`data-glitch`).
@@ -99,15 +100,15 @@ Rules: lime is the only hue; everything else is warm neutral. No mint, amber, cy
 | Wordmark | `ivan tuhai` + lime block cursor | — | lime outline | — |
 | Button primary | lime fill, ink text, r6, 44px | `--accent-hover` | lime outline | `aria-disabled`: 45% opacity, `not-allowed` |
 | Button outline | transparent, `--line-strong` border | border → fg, text → fg-strong | lime outline | same |
-| Tag | r4, 26px, bg-elev, line-strong border, mono 12 | — (static) | — | — |
 | Open-to-work tag | lime fill, ink text | — | — | — |
 | Status | glyph + label; release lime, active fg, wip/research muted | — | — | — |
 | Prompt | `NN` subtle · path muted · `❯` lime · cmd fg | — | — | — |
 | Pane | surface, 1px line, r8, highlight + sm; optional 36px tab strip (`file` · meta) | — | — | — |
 | Project tilt pane | pane + index + status + dashed footer | tilt ≤3°, lime left rail, shadow-lg | whole pane outlined (`:has(:focus-visible)`), stretched-link hit area | — |
 | ls row | name fg-strong, perm/lang columns ≥900px | lime-soft bg, name lime | inset lime outline | — |
-| Git-log row | lime hash, title @ org, note, right-aligned period | — | — | — |
-| Contact row | 60px, key subtle, value mono | lime-soft bg, arrow lime + nudge | inset lime outline | TODO rows `aria-disabled`, `not-allowed` |
+| Git-log row | lime hash, title @ org (org links when a URL exists), dash bullets in muted, right-aligned period · city | org link: lime underline | lime outline on link | — |
+| Earlier-roles table | org · title · period, 3 columns ≥768px, stacked below | — | — | — |
+| Contact row | 60px, key subtle, value mono; email row uses `mailto:` and `→`, others open a new tab with `↗` | lime-soft bg, arrow lime + nudge | inset lime outline | — |
 | TODO tag | dashed lime border, diagonal lime stripes, fg text | — | — | — |
 | Frosted hero pane | frost + shadow-lg, `zsh` tab, `pre` listing, blinking block cursor | — | — | opaque under reduced transparency |
 | Hero globe | OGL points, `aria-hidden` | pointer rotation (fine pointers) | — | No WebGL → CSS dotted sphere + orbit |
@@ -169,11 +170,12 @@ Hit targets ≥ 44px. `forced-colors`: system borders, rain/scanlines hidden.
 ### Notes
 - Content lives in `src/data/cv.ts`; every `TODO:` string renders as a TODO tag.
 - `og:image` is still TODO (1200×630 PNG at `/og.png`).
-- Name: English spelling is "Ivan Tuhai" (confirmed by Ivan). The LinkedIn URL slug is kept as-is.
+- Name: English spelling is "Ivan Tuhai" (confirmed by Ivan). LinkedIn now uses the resume's vanity URL `linkedin.com/in/listepo`.
 - `window.__cvGlitch(selector)` freezes a glitch frame — used only for review screenshots.
 - Body has no background on purpose (html paints `--bg`), otherwise the fixed rain/backdrop layers at negative z-index would be covered.
 
 ## 5. Content sources
+- **Resume PDF** (LinkedIn export, Oct 2026): role at Pyrlyn, location (Украина), email, LinkedIn `in/listepo`, all employers, titles, dates, cities and the few achievement notes. Rephrased into impact bullets; nothing added. Skills and spoken-language blocks deliberately omitted; framework lists ("Технологии: …") dropped.
 - `gh api users/listepo` (name, hireable, created 2012, X handle, public repo count), `gh api users/listepo/repos`, `gh repo list pyrlyn`, `gh api orgs/pyrlyn`.
 - Profile README `listepo/listepo` (role "engineer", motto, X/LinkedIn/GitHub links, project one-liners).
 - Org profile `pyrlyn/.github` → `profile/README.md` (Russian product descriptions for ketch, rtok, runa, cox).

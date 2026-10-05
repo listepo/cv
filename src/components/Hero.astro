@@ -19,9 +19,6 @@ const products = projects.slice(0, 5).map((p) => p.name);
       <a class="btn btn--primary" href="#projects">Смотреть проекты <span aria-hidden="true">↓</span></a>
       <a class="btn btn--outline" href="https://github.com/listepo" rel="me noopener" target="_blank">github.com/listepo<span class="sr-only"> (откроется в новой вкладке)</span></a>
     </div>
-    <ul class="hero__tags" aria-label="Основной стек">
-      <li class="tag">rust</li><li class="tag">dart/flutter</li><li class="tag">typescript</li><li class="tag">ai-agents</li>
-    </ul>
   </div>
 
   <div class="hero__stage" aria-hidden="true">
@@ -58,7 +55,6 @@ const products = projects.slice(0, 5).map((p) => p.name);
   }
   .hero__lede { margin-top: var(--space-6); max-width: 34rem; font-size: var(--text-lg); line-height: 1.6; color: var(--muted); }
   .hero__cta { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-8); }
-  .hero__tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-8); }
 
   .hero__stage { position: relative; aspect-ratio: 1 / 1; width: 100%; max-width: 520px; margin-inline: auto; }
   @media (max-width: 959px) { .hero__stage { max-width: 400px; } }
