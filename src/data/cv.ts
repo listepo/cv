@@ -50,7 +50,8 @@ export type Project = {
   name: string;
   repo: string;
   summary: string;
-  status: 'release' | 'active' | 'wip' | 'research';
+  /** Every project is in active development (`dev`) or a research project; none has a stable release yet. */
+  status: 'dev' | 'research';
   featured?: boolean;
   cmd?: string;
 };
@@ -59,7 +60,7 @@ export const projects: Project[] = [
   {
     name: 'ketch',
     repo: 'pyrlyn/ketch',
-    status: 'release',
+    status: 'dev',
     featured: true,
     cmd: 'ketch install <tool>',
     summary:
@@ -68,7 +69,7 @@ export const projects: Project[] = [
   {
     name: 'rtok',
     repo: 'pyrlyn/rtok',
-    status: 'release',
+    status: 'dev',
     featured: true,
     cmd: 'rtok',
     summary:
@@ -77,7 +78,7 @@ export const projects: Project[] = [
   {
     name: 'runa',
     repo: 'pyrlyn/runa',
-    status: 'active',
+    status: 'dev',
     featured: true,
     cmd: 'runa fit',
     summary:
@@ -86,7 +87,7 @@ export const projects: Project[] = [
   {
     name: 'cox',
     repo: 'pyrlyn/cox',
-    status: 'active',
+    status: 'dev',
     featured: true,
     cmd: 'cox run -p "…"',
     summary:
@@ -101,41 +102,42 @@ export const projects: Project[] = [
   {
     name: 'slint_dart',
     repo: 'listepo/slint_dart',
-    status: 'active',
+    status: 'dev',
     summary: 'Slint for Flutter: typed Dart codegen from .slint files, interpreter and AOT backends over Rust FFI, headless and Patrol testing.',
   },
   {
     name: 'bindsmith',
     repo: 'listepo/bindsmith',
-    status: 'wip',
+    status: 'dev',
     summary: 'One bindsmith.yaml — Dart bindings for native APIs on all six Flutter platforms.',
   },
   {
     name: 'ketch-registry',
     repo: 'pyrlyn/ketch-registry',
-    status: 'active',
+    status: 'dev',
     summary: 'The default package registry for ketch: one folder per package.',
   },
   {
     name: 'brand',
     repo: 'pyrlyn/brand',
-    status: 'active',
+    status: 'dev',
     summary: 'Brand system: design tokens, CSS, components, logos and icons.',
   },
   {
     name: 'cross-code',
     repo: 'listepo/cross-code',
-    status: 'active',
+    status: 'dev',
     summary: 'Code and utilities for cross-platform development: NativeScript, React Native, Ionic and more.',
   },
 ];
 
 export const statusLabel: Record<Project['status'], string> = {
-  release: 'released',
-  active: 'active',
-  wip: 'wip',
+  dev: 'in development',
   research: 'research',
 };
+
+/** One line on release status, shown under the projects heading and in the PDF. */
+export const projectsStatusNote = 'All are in active development (stator is research), and none has a stable release yet.';
 
 export type Job = {
   org: string;
@@ -156,8 +158,9 @@ export const experience: Job[] = [
     url: 'https://github.com/pyrlyn',
     points: [
       'Founded a developer-tools company; own its technology and technical strategy.',
-      'Shipped ketch, which installs CLI tools from GitHub releases with checksum verification, and rtok, which measurably cuts the context AI agents carry.',
+      'Building ketch, which installs CLI tools from GitHub releases with checksum verification, and rtok, which cuts the context AI agents carry and measures every reduction.',
       'Leading development of runa (a local-first AI runner) and cox (a terminal coding agent).',
+      'All four are in active development, with no stable release yet.',
     ],
   },
   {
