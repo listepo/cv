@@ -2,7 +2,7 @@
 
 If an AGENTS.md or CLAUDE.md exists higher in the tree, follow it too. On conflict, ask the creator.
 
-One-page CV site for Ivan Tuhai. Astro 5, Tailwind 4, and OGL. Copy lives in `src/data/cv.ts`. The site is hosted under `/cv` (`astro.config.mjs`: `site` `https://listepo.github.io`, `base` `/cv`).
+One-page CV site for Ivan Tuhai. Astro 5, Tailwind 4, and OGL. Copy lives in `src/data/cv.ts`. The site is hosted under `/cv` by default (`site.config.mjs`: `site` `https://listepo.github.io`, `base` `/cv`). `SITE_URL` and `SITE_BASE` override both at build time, for example `SITE_URL=https://listepo.dev SITE_BASE=/` for the domain root; never hardcode `/cv` elsewhere.
 
 ```sh
 npm ci

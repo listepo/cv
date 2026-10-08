@@ -5,9 +5,10 @@ import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize } from 'node:path';
 import { chromium } from 'playwright-core';
+import { siteBase } from '../site.config.mjs';
 
 const DIST = new URL('../dist/', import.meta.url).pathname;
-const BASE = '/cv/';
+const BASE = siteBase;
 const OUT = join(DIST, 'ivan-tuhai-cv.pdf');
 const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.woff2': 'font/woff2', '.svg': 'image/svg+xml' };
 
@@ -18,8 +19,10 @@ const server = createServer(async (req, res) => {
     p = normalize(p.slice(BASE.length)).replace(/^(\.\.[/\\])+/, '');
     let file = join(DIST, p);
     if ((await stat(file).catch(() => null))?.isDirectory()) file = join(file, 'index.html');
+    // Read before writing headers: a missing file (e.g. /favicon.ico at the root base) must become a 404.
+    const body = await readFile(file);
     res.writeHead(200, { 'content-type': types[extname(file)] ?? 'application/octet-stream' });
-    res.end(await readFile(file));
+    res.end(body);
   } catch { res.writeHead(404); res.end(); }
 });
 await new Promise((r) => server.listen(0, '127.0.0.1', r));

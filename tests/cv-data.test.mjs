@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import test from "node:test";
 
 import { about, earlier, experience, facts, links, person, projects, site, statusLabel } from "../src/data/cv.ts";
@@ -14,6 +15,22 @@ test("site url matches the pages domain", () => {
   assert.equal(site.url, "https://listepo.github.io/cv/");
   assert.ok(site.title.includes(person.name));
   assert.ok(site.description.length > 0);
+});
+
+test("SITE_URL and SITE_BASE move the site to a custom domain root", () => {
+  const read = (env) =>
+    JSON.parse(
+      execFileSync(
+        process.execPath,
+        ["--input-type=module", "-e", 'const { site } = await import("./src/data/cv.ts"); console.log(JSON.stringify(site));'],
+        { env: { ...process.env, ...env }, encoding: "utf8" },
+      ),
+    );
+  assert.deepEqual(
+    (({ domain, url }) => ({ domain, url }))(read({ SITE_URL: "https://listepo.dev/", SITE_BASE: "/" })),
+    { domain: "listepo.dev", url: "https://listepo.dev/" },
+  );
+  assert.equal(read({ SITE_URL: "https://example.com", SITE_BASE: "cv" }).url, "https://example.com/cv/");
 });
 
 test("projects use a known status and a featured command", () => {

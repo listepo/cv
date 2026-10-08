@@ -14,3 +14,4 @@ npm run preview
 - Content: `src/data/cv.ts`
 - Design system and tuning notes: [DESIGN.md](DESIGN.md)
 - Deploy: pushes to `main` build and publish via GitHub Actions (`.github/workflows/deploy.yml`) to GitHub Pages.
+- Custom domain at the root: `SITE_URL=https://listepo.dev SITE_BASE=/ npm run build`. Both variables are read in `site.config.mjs` and default to `https://listepo.github.io` and `/cv`.
