@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build && node scripts/build-pdf.mjs",
-    "preview": "astro preview --port 4321"
+    "preview": "astro preview --port 4321",
+    "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",
