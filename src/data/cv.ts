@@ -1,10 +1,14 @@
 // Facts come from Ivan's resume PDF (LinkedIn export, Oct 2026), his GitHub profile and product READMEs.
 // See DESIGN.md → "Content sources". Missing data is marked with `TODO:`; nothing here is invented.
 
+import { siteBase, siteUrl } from '../../site.config.mjs';
+
+const url = `${siteUrl}${siteBase}`;
+
 export const site = {
-  // Canonical URL = the live GitHub Pages address (listepo.dev is not deployed yet).
-  domain: 'listepo.github.io/cv',
-  url: 'https://listepo.github.io/cv/',
+  // Canonical URL: GitHub Pages by default, or SITE_URL + SITE_BASE for a custom-domain build.
+  domain: url.replace(/^https?:\/\//, '').replace(/\/$/, ''),
+  url,
   title: 'Ivan Tuhai — Founder & CTO of Pyrlyn',
   description:
     'Ivan Tuhai (listepo) — engineer building software since 2009. Founder & CTO of Pyrlyn, Senior Frontend Developer at KSF Technologies AG. Projects: ketch, rtok, runa, cox.',
