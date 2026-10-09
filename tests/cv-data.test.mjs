@@ -8,7 +8,7 @@ import { SOUND_CONFIG } from "../src/scripts/sound-config.ts";
 import { THEME_BG, THEME_KEY } from "../src/scripts/theme.ts";
 import { createNetwork } from "../src/scripts/network-sim.ts";
 
-const statuses = ["release", "active", "wip", "research"];
+const statuses = ["dev", "research"];
 
 test("site url matches the pages domain", () => {
   assert.equal(site.domain, "listepo.github.io/cv");
