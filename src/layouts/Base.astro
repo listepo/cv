@@ -3,6 +3,14 @@ import '../styles/fonts.css';
 import '../styles/global.css';
 import { site, person } from '../data/cv';
 
+interface Props {
+  title?: string;
+  description?: string;
+  /** Crawler directive. The 404 page sets `noindex` so it stays out of search and any sitemap. */
+  robots?: string;
+}
+
+const { title = site.title, description = site.description, robots } = Astro.props;
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 const canonical = site.url;
 const jsonLd = {
@@ -23,8 +31,9 @@ const jsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{site.title}</title>
-    <meta name="description" content={site.description} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {robots && <meta name="robots" content={robots} />}
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f0e8" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0a09" />
@@ -51,14 +60,14 @@ const jsonLd = {
     <meta property="og:site_name" content="listepo" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:url" content={canonical} />
-    <meta property="og:title" content={site.title} />
-    <meta property="og:description" content={site.description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <meta property="profile:username" content={person.handle} />
     <!-- TODO: og:image — 1200×630 PNG at public/og.png -->
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@listepo" />
-    <meta name="twitter:title" content={site.title} />
-    <meta name="twitter:description" content={site.description} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
