@@ -15,3 +15,5 @@ npm test
 `npm run build` runs `astro build` and then `scripts/build-pdf.mjs`, which prints the print page with headless Chrome through `playwright-core`. Set `CHROME_PATH` to choose the browser. A missing browser fails CI and only warns locally.
 
 `npm test` checks the data in `src/data/cv.ts` and `createNetwork` in `src/scripts/network-sim.ts`. Do not assert on canvas pixels, WebGL, or audio.
+
+Pull requests and pushes run `.github/workflows/ci.yml` (a SHA-pinned caller of `pyrlyn/ci`). Node comes from `mise.toml` (22, same major as the Docker image). The check job runs `npm ci`, `npm test`, and `npm run build`.
