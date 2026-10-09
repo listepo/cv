@@ -6,8 +6,6 @@ One-page personal CV site (Ivan Tuhai): Astro 5 static site + Tailwind 4 + OGL W
 
 | # | Status | Priority | Complexity | Readiness | Agent |
 | --- | --- | --- | --- | --- | --- |
-| T1 | todo | P2 | 1 | 0% | |
-| T2 | todo | P2 | 1 | 0% | |
 | T3 | todo | P3 | 1 | 0% | |
 | T4 | todo | P2 | 1 | 0% | |
 | T5 | todo | P3 | 2 | 0% | |
@@ -16,14 +14,6 @@ One-page personal CV site (Ivan Tuhai): Astro 5 static site + Tailwind 4 + OGL W
 | T8 | todo | P3 | 2 | 0% | |
 
 Audit note (2026-10-07): no secrets tracked, no unintended personal-data exposure, the PDF server binds 127.0.0.1 with normalized paths. Clean tree, dist/ gitignored.
-
-### T1. "Download CV (PDF)" 404s in dev
-
-`src/components/Hero.astro:33` links to `${BASE_URL}/ivan-tuhai-cv.pdf`, but the PDF is only written into `dist/` post-build; `public/` has no copy. Done means: the link works in `npm run dev` (placeholder in `public/`, or a dev-mode href to `/print/`).
-
-### T2. DIST path breaks on non-ASCII/space paths
-
-`scripts/build-pdf.mjs:9` uses `new URL('../dist/', import.meta.url).pathname`, which is percent-encoded — cloning into `~/My Projects/cv` breaks every stat/readFile. Done means: `fileURLToPath(...)` is used.
 
 ### T3. Debug glitch hook permanently disables glitching
 

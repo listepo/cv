@@ -1,5 +1,3 @@
-- T1. "Download CV (PDF)" 404s in dev
-- T2. DIST path breaks on non-ASCII/space paths
 - T3. Debug glitch hook permanently disables glitching
 - T4. Security hardening: JSON-LD escaping + SHA-pinned CI actions
 - T5. Deduplicate theme background and contact data
