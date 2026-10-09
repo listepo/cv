@@ -283,11 +283,9 @@
   /* status: text label + glyph; colour is secondary */
   .status { font-family: var(--font-mono); font-size: var(--text-xs); display: inline-flex; align-items: center; gap: 6px; color: var(--muted); white-space: nowrap; }
   .status::before { content: "○"; font-size: 10px; }
-  .status--release { color: var(--accent); }
-  .status--release::before { content: "●"; }
-  .status--active { color: var(--fg); }
-  .status--active::before { content: "◐"; }
-  .status--wip::before, .status--research::before { content: "◌"; }
+  .status--dev { color: var(--fg); }
+  .status--dev::before { content: "◐"; }
+  .status--research::before { content: "◌"; }
 
   .todo {
     font-family: var(--font-mono); color: var(--fg);

@@ -48,7 +48,7 @@ Contrast = WCAG ratio. "Rain peak" = worst case behind text: brightest rain glyp
 | `--fg-strong` | `#faf7f2` | 18.51 | 17.38 | 16.25 | — | Headings |
 | `--muted` | `#a8a198` | 7.74 | 7.26 | 6.79 | 6.89 / 5.30 | Secondary text |
 | `--subtle` | `#9a948b` | 6.58 | 6.20 | 5.77 | 5.86 / 4.51 | Labels, line numbers |
-| `--accent` (lime) | `#c8f031` | 15.04 | 14.12 | 13.20 | 13.39 / 10.30 | Text/stroke signal: prompt sigil, cursor, status "release", hashes, links on hover, rails, focus ring, progress bar |
+| `--accent` (lime) | `#c8f031` | 15.04 | 14.12 | 13.20 | 13.39 / 10.30 | Text/stroke signal: prompt sigil, cursor, hashes, links on hover, rails, focus ring, progress bar |
 | `--accent-fill` | `#c8f031` | — | — | — | — | Filled surfaces with `--accent-ink` text: primary button, "open to offers" tag, selection, skip link |
 | `--accent-hover` | `#d8f75e` | — | — | — | — | Primary hover (ink 16.38) |
 | `--accent-ink` | `#0b0a09` | 15.04 on lime | — | — | — | Text on lime |
@@ -81,7 +81,7 @@ Warm paper and near-black ink. Bright lime survives only as a **fill** with dark
 
 Light shadows are warm and much lighter (`rgb(60 45 25 / .06–.10)`), the highlight is `inset 0 1px 0 rgb(255 255 255 / .7)`, the frosted pane is `rgb(251 249 244 / .78)` (opaque `#fbf9f4`), scanlines `rgb(60 45 25 / .035)`, top bar `rgb(244 240 232 / .94)`.
 
-Rules: lime is the only hue; everything else is warm neutral. No mint, amber, cyan, teal, blue or purple. Status uses glyph + label (`● released`, `◐ active`, `◌ wip/research`), never colour alone.
+Rules: lime is the only hue; everything else is warm neutral. No mint, amber, cyan, teal, blue or purple. Status uses glyph + label (`◐ in development`, `◌ research`), never colour alone. Nothing is marked released: every project is in active development with no stable release yet.
 
 ### 2b. Theme switching & browser header colour
 - **Before first paint:** an inline script in `<head>` (`Base.astro`) sets `html[data-theme]` and `style.colorScheme` from `localStorage['cv:theme']` (`light`/`dark`), otherwise from `prefers-color-scheme`. No flash. Without JS the page stays dark.
@@ -192,7 +192,7 @@ A quiet hover tick on buttons and button-like links (`.btn`, nav links, wordmark
 | Button primary | lime fill, ink text, r6, 44px | `--accent-hover` | lime outline | `aria-disabled`: 45% opacity, `not-allowed` |
 | Button outline | transparent, `--line-strong` border | border → fg, text → fg-strong | lime outline | same |
 | Open-to-work tag | lime fill, ink text | — | — | — |
-| Status | glyph + label; release lime, active fg, wip/research muted | — | — | — |
+| Status | glyph + label; in development fg, research muted | — | — | — |
 | Prompt | `NN` subtle · path muted · `❯` lime · cmd fg | — | — | — |
 | Pane | surface, 1px line, r8, highlight + sm; optional 36px tab strip (`file` · meta) | — | — | — |
 | Project tilt pane | pane + index + status + dashed footer | tilt ≤3°, lime left rail, shadow-lg | whole pane outlined (`:has(:focus-visible)`), stretched-link hit area | — |

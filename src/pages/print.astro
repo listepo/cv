@@ -3,7 +3,7 @@
 // Same data as the page (src/data/cv.ts); ATS-friendly: one column, real text, standard headings, working links.
 // No skills or languages sections (Ivan's call). No scripts, no canvas, no animation.
 import '../styles/fonts.css';
-import { person, links, about, experience, earlier, projects, site } from '../data/cv';
+import { person, links, about, experience, earlier, projects, statusLabel, projectsStatusNote, site } from '../data/cv';
 const featured = projects.filter((p) => p.featured);
 const rest = projects.filter((p) => !p.featured);
 const role = person.role.charAt(0).toUpperCase() + person.role.slice(1);
@@ -56,14 +56,15 @@ const role = person.role.charAt(0).toUpperCase() + person.role.slice(1);
 
       <section>
         <h2>Projects</h2>
+        <p class="proj__note">{projectsStatusNote}</p>
         {featured.map((p) => (
           <article class="proj">
-            <h3>{p.name} <a class="proj__repo" href={`https://github.com/${p.repo}`}>github.com/{p.repo}</a></h3>
+            <h3>{p.name} <span class="proj__status">{statusLabel[p.status]}</span> <a class="proj__repo" href={`https://github.com/${p.repo}`}>github.com/{p.repo}</a></h3>
             <p>{p.summary}</p>
           </article>
         ))}
         <ul class="proj__rest">
-          {rest.map((p) => <li><a href={`https://github.com/${p.repo}`}>{p.name}</a>: {p.summary}</li>)}
+          {rest.map((p) => <li><a href={`https://github.com/${p.repo}`}>{p.name}</a> <span class="proj__status">({statusLabel[p.status]})</span>: {p.summary}</li>)}
         </ul>
       </section>
     </main>
@@ -97,6 +98,8 @@ const role = person.role.charAt(0).toUpperCase() + person.role.slice(1);
   .earlier { columns: 2; column-gap: 8mm; }
   .proj__repo { font-family: "Geist Mono Variable", ui-monospace, monospace; font-size: 8.4pt; font-weight: 400; color: var(--accent); margin-left: 2mm; }
   .proj p { margin-top: .4mm; }
+  .proj__status { font-family: "Geist Mono Variable", ui-monospace, monospace; font-size: 8.4pt; font-weight: 400; color: var(--muted); margin-left: 1.5mm; }
+  .proj__note { color: var(--muted); margin-bottom: 2mm; }
   .proj__rest { margin-top: 1mm; }
   .proj__rest a { font-weight: 600; color: var(--accent); }
 </style>

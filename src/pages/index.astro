@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
 import Prompt from '../components/Prompt.astro';
-import { about, facts, projects, statusLabel, experience, earlier, links, person, site } from '../data/cv';
+import { about, facts, projects, statusLabel, projectsStatusNote, experience, earlier, links, person, site } from '../data/cv';
 
 const featured = projects.filter((p) => p.featured);
 const rest = projects.filter((p) => !p.featured);
@@ -84,7 +84,7 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
       <div class="section-head">
         <Prompt num="03" cmd="ls -la ~/projects" />
         <h2 id="projects-title" class="section-title" data-glitch>Projects</h2>
-        <p class="section-lede">The main ones are Pyrlyn’s CLI and AI tools. Below are the rest of my open repositories.</p>
+        <p class="section-lede">The main ones are Pyrlyn’s CLI and AI tools. Below are the rest of my open repositories. {projectsStatusNote}</p>
       </div>
 
       <ul class="featured" role="list">
@@ -206,7 +206,7 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
   .ls__desc { grid-area: desc; color: var(--muted); font-size: var(--text-sm); }
   .ls__status { grid-area: status; }
   @media (min-width: 900px) {
-    .ls__row { grid-template-columns: 10ch 16ch 1fr 10ch; grid-template-areas: "perm name desc status"; }
+    .ls__row { grid-template-columns: 10ch 16ch 1fr 16ch; grid-template-areas: "perm name desc status"; }
     .ls__perm { display: block; grid-area: perm; color: var(--subtle); font-size: var(--text-xs); }
   }
 
