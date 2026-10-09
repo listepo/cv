@@ -1,0 +1,54 @@
+---
+// Custom 404. Astro emits dist/404.html, which GitHub Pages serves for unknown paths and
+// nginx serves via `error_page 404 /404.html` (docker/nginx.conf). The home link uses
+// import.meta.env.BASE_URL, so it follows SITE_BASE (`/` at the domain root, or the
+// GitHub Pages prefix). `noindex` keeps the page out of search and any sitemap.
+// The PDF build only prints the print route, so this page is not part of the CV.
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Prompt from '../components/Prompt.astro';
+
+const home = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+---
+<Base title="404 — Page not found" description="This path does not exist." robots="noindex">
+  <Nav wordmarkHref={home} sections={false} />
+  <main id="main">
+    <section class="miss container-x" aria-labelledby="miss-title">
+      <p class="miss__code" aria-hidden="true">404</p>
+      <div class="section-head">
+        <Prompt cmd="cd missing" />
+        <h1 id="miss-title" class="section-title" data-glitch>Page not found</h1>
+      </div>
+      <p class="section-lede">This path does not exist.</p>
+      <p class="miss__back">
+        <a class="btn btn--primary" href={home}>
+          <span class="btn__label" data-glitch>cd ~</span>
+          <span class="sr-only">Back to the home page</span>
+        </a>
+      </p>
+    </section>
+  </main>
+</Base>
+
+<script>
+  import '../scripts/main.ts';
+</script>
+
+<style>
+  .miss {
+    display: grid;
+    align-content: center;
+    gap: var(--space-6);
+    min-height: calc(100svh - 56px);
+    padding-block: var(--space-16);
+  }
+  .miss__code {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: var(--text-display);
+    line-height: 0.98;
+    letter-spacing: -0.06em;
+    color: var(--fg-strong);
+  }
+  .miss__back { margin-top: var(--space-2); }
+</style>

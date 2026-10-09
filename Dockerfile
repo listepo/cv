@@ -21,7 +21,7 @@ COPY . .
 ARG SITE_URL=https://listepo.dev
 ARG SITE_BASE=/
 ENV SITE_URL=${SITE_URL} SITE_BASE=${SITE_BASE}
-RUN npm run build && test -f dist/index.html && test -f dist/ivan-tuhai-cv.pdf
+RUN npm run build && test -f dist/index.html && test -f dist/404.html && test -f dist/ivan-tuhai-cv.pdf
 
 FROM nginx:${NGINX_VERSION}
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
