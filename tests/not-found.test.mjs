@@ -10,7 +10,7 @@ test("404 page links home through the configurable base and stays out of search 
   assert.match(page, /import\.meta\.env\.BASE_URL/);
   assert.doesNotMatch(page, /href=["']\/cv/);
   assert.match(page, /robots="noindex"/);
-  assert.match(nginx, /^error_page 404 \/404\.html;$/m);
+  assert.match(nginx, /^[ \t]*error_page 404 \/404\.html;$/m);
   assert.match(pdf, /\$\{BASE\}print\//);
   assert.doesNotMatch(pdf, /404\.html/);
 });
