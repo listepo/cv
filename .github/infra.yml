@@ -1,0 +1,21 @@
+# Checks for pyrlyn/ci's ci.yml. Shared defaults stay on (actionlint, CodeQL,
+# Semgrep, the .NET no-op until a .NET project exists). Draft pull requests
+# skip every job; `ready_for_review` runs them.
+version: 1
+
+skip-drafts: true
+
+jobs:
+  - name: check
+    timeout-minutes: 20
+    # Install Node from mise.toml (major 22, same as the Docker image).
+    mise: true
+    setup: npm ci
+    # `npm run build` is `astro build` plus scripts/build-pdf.mjs. GitHub-hosted
+    # ubuntu runners ship Chrome; CI=true makes a missing browser fail the build.
+    run: |
+      npm test
+      npm run build
+      test -f dist/index.html
+      test -f dist/404.html
+      test -f dist/ivan-tuhai-cv.pdf
