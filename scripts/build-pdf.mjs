@@ -4,10 +4,12 @@
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
 import { siteBase } from '../site.config.mjs';
 
-const DIST = new URL('../dist/', import.meta.url).pathname;
+// URL.pathname stays percent-encoded, so a checkout under a space or non-ASCII path breaks stat/readFile.
+const DIST = fileURLToPath(new URL('../dist/', import.meta.url));
 const BASE = siteBase;
 const OUT = join(DIST, 'ivan-tuhai-cv.pdf');
 const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.woff2': 'font/woff2', '.svg': 'image/svg+xml' };

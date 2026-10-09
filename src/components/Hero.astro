@@ -14,6 +14,9 @@ fbNodes.forEach((n, i) => {
   const near = fbNodes.map((m, j) => [j, (m.x - n.x) ** 2 + (m.y - n.y) ** 2] as const).filter(([j]) => j !== i).sort((p, q) => p[1] - q[1]);
   for (const [j] of near.slice(0, 2)) if (i < j) fbEdges.push([i, j]);
 });
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+// The PDF is written into dist/ by the post-build script, so dev has no file to download.
+const cvHref = import.meta.env.DEV ? `${base}print/` : `${base}ivan-tuhai-cv.pdf`;
 ---
 <section id="top" class="hero container-x" aria-labelledby="hero-title">
   <div class="hero__copy">
@@ -30,7 +33,7 @@ fbNodes.forEach((n, i) => {
     <div class="hero__cta">
       <a class="btn btn--primary" href="#projects"><span class="btn__label" data-glitch>View projects</span> <span aria-hidden="true">↓</span></a>
       <a class="btn btn--outline" href="https://github.com/listepo" rel="me noopener" target="_blank"><span class="btn__label" data-glitch>github.com/listepo</span><span class="sr-only"> (opens in a new tab)</span></a>
-      <a class="btn btn--ghost" href={`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}ivan-tuhai-cv.pdf`} download="ivan-tuhai-cv.pdf" type="application/pdf">
+      <a class="btn btn--ghost" href={cvHref} {...import.meta.env.DEV ? {} : { download: 'ivan-tuhai-cv.pdf', type: 'application/pdf' }}>
         <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13.5h10" /></svg>
         Download CV (PDF)
       </a>
