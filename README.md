@@ -11,6 +11,24 @@ npm run build     # static site in dist/
 npm run preview
 ```
 
+## Run with Docker
+
+The `Dockerfile` builds the site and the PDF for the domain root (`SITE_URL=https://listepo.dev`,
+`SITE_BASE=/`) in a Node 22 stage and serves `dist/` with nginx (`docker/nginx.conf`: static files, gzip,
+long-lived cache headers for `/_astro/`). The build stage installs Debian's Chromium for
+`scripts/build-pdf.mjs` (`CHROME_PATH=/usr/bin/chromium`, `CI=true`, so a PDF failure fails the build).
+The container listens on port 80.
+
+```sh
+docker build -t listepo-cv .
+docker run -d --name listepo-cv -p 127.0.0.1:8081:80 listepo-cv   # http://localhost:8081/
+```
+
+Build args: `SITE_URL`, `SITE_BASE` (`--build-arg SITE_BASE=/cv` for the GitHub Pages layout),
+`NODE_VERSION` (22), `NGINX_VERSION` (`1.30-alpine`).
+
 - Content: `src/data/cv.ts`
 - Design system and tuning notes: [DESIGN.md](DESIGN.md)
 - Deploy: pushes to `main` build and publish via GitHub Actions (`.github/workflows/deploy.yml`) to GitHub Pages.
+- CI: pull requests and pushes run `.github/workflows/ci.yml`, a caller of [pyrlyn/ci](https://github.com/pyrlyn/ci). It installs Node from `mise.toml`, then `npm ci`, `npm test`, and `npm run build` (site and PDF).
+- Custom domain at the root: `SITE_URL=https://listepo.dev SITE_BASE=/ npm run build`. Both variables are read in `site.config.mjs` and default to `https://listepo.github.io` and `/cv`.
