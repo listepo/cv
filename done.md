@@ -1,6 +1,6 @@
 # Done
 
-The site already renders the one-page CV, the WebGL hero, the print page, and a post-build PDF. Pushes to `main` publish GitHub Pages via `.github/workflows/deploy.yml`.
+The site already renders the one-page CV, the WebGL hero, the print page, and a post-build PDF.
 
 ### T1. "Download CV (PDF)" 404s in dev
 

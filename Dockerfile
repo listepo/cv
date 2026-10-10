@@ -17,7 +17,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY . .
-# Served at the domain root by default; SITE_BASE=/cv builds the GitHub Pages layout instead.
+# Served at the domain root by default; set SITE_BASE for a subpath.
 ARG SITE_URL=https://listepo.dev
 ARG SITE_BASE=/
 ENV SITE_URL=${SITE_URL} SITE_BASE=${SITE_BASE}

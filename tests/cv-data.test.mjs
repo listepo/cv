@@ -10,9 +10,9 @@ import { createNetwork } from "../src/scripts/network-sim.ts";
 
 const statuses = ["dev", "research"];
 
-test("site url matches the pages domain", () => {
-  assert.equal(site.domain, "listepo.github.io/cv");
-  assert.equal(site.url, "https://listepo.github.io/cv/");
+test("site url matches the default domain", () => {
+  assert.equal(site.domain, "listepo.dev");
+  assert.equal(site.url, "https://listepo.dev/");
   assert.ok(site.title.includes(person.name));
   assert.ok(site.description.length > 0);
 });

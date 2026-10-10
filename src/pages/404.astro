@@ -1,8 +1,7 @@
 ---
-// Custom 404. Astro emits dist/404.html, which GitHub Pages serves for unknown paths and
-// nginx serves via `error_page 404 /404.html` (docker/nginx.conf). The home link uses
-// import.meta.env.BASE_URL, so it follows SITE_BASE (`/` at the domain root, or the
-// GitHub Pages prefix). `noindex` keeps the page out of search and any sitemap.
+// Custom 404. Astro emits dist/404.html, which nginx serves for unknown paths via
+// `error_page 404 /404.html` (docker/nginx.conf). The home link uses import.meta.env.BASE_URL,
+// so it follows SITE_BASE (`/` at the domain root, or a subpath). `noindex` keeps the page out of search and any sitemap.
 // The PDF build only prints the print route, so this page is not part of the CV.
 import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
