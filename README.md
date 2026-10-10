@@ -1,6 +1,6 @@
 # cv — Ivan Tuhai (listepo)
 
-One-page personal CV site. Live: https://listepo.github.io/cv/
+One-page personal CV site.
 
 Astro 5 (static) + Tailwind 4 + OGL: a dark code/terminal aesthetic, a WebGL "graph cube" hero with an electrostatic hover effect, a digital-rain background and rare heading glitches, all respecting `prefers-reduced-motion`.
 
@@ -29,6 +29,5 @@ Build args: `SITE_URL`, `SITE_BASE` (`--build-arg SITE_BASE=/cv` for the GitHub 
 
 - Content: `src/data/cv.ts`
 - Design system and tuning notes: [DESIGN.md](DESIGN.md)
-- Deploy: pushes to `main` build and publish via GitHub Actions (`.github/workflows/deploy.yml`) to GitHub Pages.
 - CI: pull requests and pushes run `.github/workflows/ci.yml`, a caller of [pyrlyn/ci](https://github.com/pyrlyn/ci). It installs Node from `mise.toml`, then `npm ci`, `npm test`, and `npm run build` (site and PDF).
 - Custom domain at the root: `SITE_URL=https://listepo.dev SITE_BASE=/ npm run build`. Both variables are read in `site.config.mjs` and default to `https://listepo.github.io` and `/cv`.
