@@ -3,9 +3,9 @@
 One-page personal site for Ivan Tuhai (`listepo`). UI copy is English (`<html lang="en">`); code identifiers are English.
 Stack: Astro 5 (static) + Tailwind 4 (`@tailwindcss/vite`) + OGL (lazy hero only). Self-hosted Geist / Geist Mono via Fontsource.
 
-Live: https://listepo.github.io/cv/ (GitHub Pages, `base: '/cv'`; canonical/OG use this URL until listepo.dev is deployed). A root build for listepo.dev sets `SITE_URL=https://listepo.dev SITE_BASE=/` (`site.config.mjs`).
+Live: https://listepo.dev/ (`base: '/'`). `SITE_URL` and `SITE_BASE` override the origin and base path (`site.config.mjs`).
 
-Run: `npm i && npm run dev` (http://localhost:4321/cv/) · `npm run build` → `dist/` · `npm run preview`.
+Run: `npm i && npm run dev` (http://localhost:4321/) · `npm run build` → `dist/` · `npm run preview`.
 
 ## 0. Identity
 
@@ -24,7 +24,7 @@ No skills, stack or languages lists anywhere (per Ivan). Order follows a resume:
 | 3 | `#experience` | `02 … git log --author=ivan --oneline` | One pane as a git-log: hash · title @ org · impact bullets · period · city. 8 detailed roles (Pyrlyn → 111PIX UA) + compact "Earlier · 2009 — 2015" table (6 roles). |
 | 4 | `#projects` | `03 … ls -la ~/projects` | 4 featured tilt panes (ketch, rtok, runa, cox) + `ls -la` pane of other repos (no language column). |
 | 5 | `#contact` | `04 … cat contacts` | One pane, 2-column rows: email (mailto), linkedin, github, x. |
-| — | footer | `listepo.github.io/cv▌` | © year Ivan Tuhai, `cd ~ ↑`. |
+| — | footer | `listepo.dev▌` | © year Ivan Tuhai, `cd ~ ↑`. |
 
 Heading semantics: one `h1`, `h2` per section, `h3` per project/job. Glitch targets: h1 + every h2 + the two hero CTA labels (`data-glitch`).
 
@@ -263,7 +263,7 @@ Dark values below; the light overrides live in `:root[data-theme="light"]` in `s
 - Content lives in `src/data/cv.ts`; every `TODO:` string renders as a TODO tag.
 - `og:image` is still TODO (1200×630 PNG at `/og.png`).
 - Name: English spelling is "Ivan Tuhai" (confirmed by Ivan). LinkedIn now uses the resume's vanity URL `linkedin.com/in/listepo`.
-- **CV PDF:** "Download CV (PDF)" (ghost button with a download icon, next to the hero CTAs) links to `<base>ivan-tuhai-cv.pdf` (`/cv/ivan-tuhai-cv.pdf` on GitHub Pages) with `download`. In `npm run dev` the same button links to `<base>print/`, because the PDF file is written only by the post-build step. The PDF is generated at build time: `npm run build` = `astro build && node scripts/build-pdf.mjs`, which serves `dist/` locally and prints the `<base>print/` route (`src/pages/print.astro`, same `src/data/cv.ts`, noindex) to A4 with headless Chrome via `playwright-core` (`channel: 'chrome'`, or `CHROME_PATH`). The output is tagged with an outline and selectable text, with working links. It is one column with standard headings (Summary, Experience, Projects), currently 2 pages, with no skills or languages sections and a subtle lime accent. In CI (withastro/action runs the same build script; ubuntu runners ship Chrome) a missing browser fails the build. Locally it only warns.
+- **CV PDF:** "Download CV (PDF)" (ghost button with a download icon, next to the hero CTAs) links to `<base>ivan-tuhai-cv.pdf` with `download`. In `npm run dev` the same button links to `<base>print/`, because the PDF file is written only by the post-build step. The PDF is generated at build time: `npm run build` = `astro build && node scripts/build-pdf.mjs`, which serves `dist/` locally and prints the `<base>print/` route (`src/pages/print.astro`, same `src/data/cv.ts`, noindex) to A4 with headless Chrome via `playwright-core` (`channel: 'chrome'`, or `CHROME_PATH`). The output is tagged with an outline and selectable text, with working links. It is one column with standard headings (Summary, Experience, Projects), currently 2 pages, with no skills or languages sections and a subtle lime accent. In CI (ubuntu runners ship Chrome) a missing browser fails the build. Locally it only warns.
 - **Print:** `@media print` in `global.css` gives Cmd+P a clean light A4 result: decoration layers, nav, CTAs and the graph are hidden, reveals forced visible, no animation, panes flattened, `break-inside: avoid` on rows.
 - `window.__cvGlitch(selector)` freezes a glitch frame — used only for review screenshots.
 - Body has no background on purpose (html paints `--bg`), otherwise the fixed rain/backdrop layers at negative z-index would be covered.

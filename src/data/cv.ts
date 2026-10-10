@@ -6,7 +6,7 @@ import { siteBase, siteUrl } from '../../site.config.mjs';
 const url = `${siteUrl}${siteBase}`;
 
 export const site = {
-  // Canonical URL: GitHub Pages by default, or SITE_URL + SITE_BASE for a custom-domain build.
+  // Canonical URL: SITE_URL + SITE_BASE (default https://listepo.dev/).
   domain: url.replace(/^https?:\/\//, '').replace(/\/$/, ''),
   url,
   title: 'Ivan Tuhai — Founder & CTO of Pyrlyn',

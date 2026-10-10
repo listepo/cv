@@ -6,7 +6,7 @@ Astro 5 (static) + Tailwind 4 + OGL: a dark code/terminal aesthetic, a WebGL "gr
 
 ```sh
 npm ci
-npm run dev       # http://localhost:4321/cv/
+npm run dev       # http://localhost:4321/
 npm run build     # static site in dist/
 npm run preview
 ```
@@ -24,10 +24,10 @@ docker build -t listepo-cv .
 docker run -d --name listepo-cv -p 127.0.0.1:8081:80 listepo-cv   # http://localhost:8081/
 ```
 
-Build args: `SITE_URL`, `SITE_BASE` (`--build-arg SITE_BASE=/cv` for the GitHub Pages layout),
+Build args: `SITE_URL`, `SITE_BASE` (`--build-arg SITE_BASE=/cv` to serve under a subpath),
 `NODE_VERSION` (22), `NGINX_VERSION` (`1.30-alpine`).
 
 - Content: `src/data/cv.ts`
 - Design system and tuning notes: [DESIGN.md](DESIGN.md)
 - CI: pull requests and pushes run `.github/workflows/ci.yml`, a caller of [pyrlyn/ci](https://github.com/pyrlyn/ci). It installs Node from `mise.toml`, then `npm ci`, `npm test`, and `npm run build` (site and PDF).
-- Custom domain at the root: `SITE_URL=https://listepo.dev SITE_BASE=/ npm run build`. Both variables are read in `site.config.mjs` and default to `https://listepo.github.io` and `/cv`.
+- Another origin or subpath: `SITE_URL=https://example.com SITE_BASE=/cv npm run build`. Both variables are read in `site.config.mjs` and default to `https://listepo.dev` and `/`.
