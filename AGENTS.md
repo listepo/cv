@@ -2,7 +2,7 @@
 
 If an AGENTS.md or CLAUDE.md exists higher in the tree, follow it too. On conflict, ask the creator.
 
-One-page CV site for Ivan Tuhai. Astro 5, Tailwind 4, and OGL. Copy lives in `src/data/cv.ts`. The site is served at the root of `https://listepo.dev` by default (`site.config.mjs`: `site` `https://listepo.dev`, `base` `/`). `SITE_URL` and `SITE_BASE` override both at build time, for example `SITE_URL=https://example.com SITE_BASE=/cv` for a subpath; never hardcode a base path elsewhere.
+One-page CV site for Ivan Tuhai. Astro 7, Tailwind 4, and OGL. Copy lives in `src/data/cv.ts`. The site is served at the root of `https://listepo.dev` by default (`site.config.mjs`: `site` `https://listepo.dev`, `base` `/`). `SITE_URL` and `SITE_BASE` override both at build time, for example `SITE_URL=https://example.com SITE_BASE=/cv` for a subpath; never hardcode a base path elsewhere.
 
 ```sh
 npm ci

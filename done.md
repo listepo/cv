@@ -21,3 +21,11 @@ Those files are in the repo root. `toolchain.md` lists Node, npm, Astro, and hea
 `src/data/cv.ts` and `createNetwork` return data the page renders, and nothing checked them. Canvas, WebGL, and audio stay out of the suite. Done means: `npm test` checks the content invariants and that a small network is finite and connected.
 
 `node --test tests/*.test.mjs` passed 6 tests: site and project invariants, contact links, experience shape, config ranges, and a connected `createNetwork` graph. Hero, rain, glitch, and hover sound stay untested.
+
+### T9. Upgrade vulnerable site dependencies
+
+The creator approved dependency updates after npm audit reported high and critical advisories. Preserve static routes, content and assets while upgrading Astro and the affected dependency graph.
+
+Execution plan: capture existing tests/build output; update package manifests and lockfile using npm; preserve HTML whitespace behavior; verify tests, build, package audit and site-specific PDF/docs/SEO checks. Update toolchain documentation. Rollback is a revert of this PR; no runtime data migration is involved.
+
+Validation: npm test (11 passing), npm run build (3 routes and a two-page PDF), npm audit (0 vulnerabilities). All routes and extracted HTML text match the Astro 5 baseline. Preserved HTML whitespace with compressHTML: true. Migration references: https://docs.astro.build/en/guides/upgrade-to/v6/ and https://docs.astro.build/en/guides/upgrade-to/v7/ (checked 2026-10-15).
