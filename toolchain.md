@@ -9,7 +9,7 @@
 
 | Package | Where | Source | Why here |
 | --- | --- | --- | --- |
-| astro | local | https://github.com/withastro/astro | Static site |
+| astro | local | https://github.com/withastro/astro | Static site (Astro 7; Node >=22.12) |
 | tailwindcss | local | https://github.com/tailwindlabs/tailwindcss | Utilities |
 | @tailwindcss/vite | local | https://github.com/tailwindlabs/tailwindcss | Tailwind Vite plugin |
 | ogl | local | https://github.com/oframe/ogl | WebGL hero graph |
