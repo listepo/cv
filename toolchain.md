@@ -4,6 +4,9 @@
 | --- | --- | --- | --- |
 | node | `mise install` (`mise.toml`, Node 22) or nodejs.org | Run Astro, the PDF script, and the tests. CI installs this pin | https://nodejs.org/ |
 | npm | bundled with node | Install packages and run scripts | https://github.com/npm/cli |
+| jactionlint | mise (`mise.toml` pins `github:jdx/jactionlint` 2.0.2) | Lint the workflows (the pre-push hook and `mise x -- jactionlint`); CI lints through pyrlyn/ci | https://github.com/jdx/jactionlint |
+| hk | mise (`mise.toml` pins 2.5.0) | Runs jactionlint as a pre-push hook (`hk.pkl`) | https://github.com/jdx/hk |
+| shellcheck | mise (`mise.toml` pins 0.11.0) | Checks `run:` scripts inside jactionlint | https://github.com/koalaman/shellcheck |
 | Docker | any engine (Docker Engine, OrbStack, Colima). Optional | `docker build` / `docker run` of the `Dockerfile` (images `node:22-bookworm-slim` with Debian Chromium, `nginx:1.30-alpine`) | https://docs.docker.com/ |
 | Google Chrome | google.com/chrome, or the browser on the GitHub-hosted runner | `scripts/build-pdf.mjs` drives it through `playwright-core`. `CHROME_PATH` overrides the lookup | https://www.google.com/chrome/ |
 
