@@ -14,3 +14,9 @@ test("404 page links home through the configurable base and stays out of search 
   assert.match(pdf, /\$\{BASE\}print\//);
   assert.doesNotMatch(pdf, /404\.html/);
 });
+
+test("nginx redirects the old /cv/ path to the root and keeps relative redirects", () => {
+  assert.match(nginx, /^[ \t]*absolute_redirect off;$/m);
+  assert.match(nginx, /location = \/cv \{ return 301 \/; \}/);
+  assert.match(nginx, /location \^~ \/cv\/ \{ return 301 \/; \}/);
+});
