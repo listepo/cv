@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { siteBase, siteUrl } from './site.config.mjs';
 
@@ -10,5 +11,7 @@ export default defineConfig({
   compressHTML: true,
   site: siteUrl,
   base: siteBase === '/' ? '/' : siteBase.slice(0, -1),
+  // The print page is noindex and the 404 page is skipped by default, so neither is listed.
+  integrations: [sitemap({ filter: (page) => !/\/print\/?$/.test(page) })],
   vite: { plugins: [tailwindcss()] },
 });

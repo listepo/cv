@@ -1,7 +1,7 @@
 ---
 import '../styles/fonts.css';
 import '../styles/global.css';
-import { site, person } from '../data/cv';
+import { site, person, projects } from '../data/cv';
 
 interface Props {
   title?: string;
@@ -13,17 +13,42 @@ interface Props {
 const { title = site.title, description = site.description, robots } = Astro.props;
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 const canonical = site.url;
-const jsonLd = {
-  '@context': 'https://schema.org',
+const ogImage = new URL('og.png', site.url).href;
+const ogAlt = 'Ivan Tuhai, founder & CTO of Pyrlyn — ketch, rtok, runa, cox';
+const person_ = {
   '@type': 'Person',
+  '@id': `${site.url}#person`,
   name: person.name,
   alternateName: person.handle,
   url: site.url,
+  description,
   jobTitle: 'CTO',
   worksFor: { '@type': 'Organization', name: 'Pyrlyn', url: 'https://github.com/pyrlyn' },
   email: 'mailto:listepo@gmail.com',
   address: { '@type': 'PostalAddress', addressCountry: 'UA' },
   sameAs: ['https://github.com/listepo', 'https://x.com/listepo', 'https://www.linkedin.com/in/listepo'],
+};
+// Only the four Pyrlyn products named in the title; text comes from src/data/cv.ts. No ratings, prices or versions.
+const software = projects
+  .filter((p) => p.featured)
+  .map((p) => ({
+    '@type': 'SoftwareApplication',
+    name: p.name,
+    description: p.summary,
+    url: `https://github.com/${p.repo}`,
+    applicationCategory: 'DeveloperApplication',
+    // Only ketch states its platforms on the site.
+    ...(p.name === 'ketch' && { operatingSystem: 'macOS, Linux, Windows' }),
+    author: { '@id': person_['@id'] },
+  }));
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  url: site.url,
+  name: title,
+  description,
+  mainEntity: person_,
+  hasPart: software,
 };
 ---
 <!doctype html>
@@ -63,11 +88,17 @@ const jsonLd = {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="profile:username" content={person.handle} />
-    <!-- TODO: og:image — 1200×630 PNG at public/og.png -->
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@listepo" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogAlt} />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
