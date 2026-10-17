@@ -14,3 +14,17 @@ test("404 page links home through the configurable base and stays out of search 
   assert.match(pdf, /\$\{BASE\}print\//);
   assert.doesNotMatch(pdf, /404\.html/);
 });
+
+test("robots.txt points at the sitemap and the build generates it without the print page", () => {
+  const robots = readFileSync(new URL("../public/robots.txt", import.meta.url), "utf8");
+  const config = readFileSync(new URL("../astro.config.mjs", import.meta.url), "utf8");
+  assert.match(robots, /^Sitemap: https:\/\/listepo\.dev\/sitemap-index\.xml$/m);
+  assert.match(config, /sitemap\(\{ filter: \(page\) => !page\.includes\('\/print'\) \}\)/);
+});
+
+test("inline links keep a 24px tap target and the top bar tightens below 360px", () => {
+  const css = readFileSync(new URL("../src/styles/global.css", import.meta.url), "utf8");
+  const nav = readFileSync(new URL("../src/components/Nav.astro", import.meta.url), "utf8");
+  assert.match(css, /\.link \{[^}]*min-height: 24px/);
+  assert.match(nav, /@media \(max-width: 359px\)/);
+});
