@@ -9,9 +9,9 @@ export const site = {
   // Canonical URL: SITE_URL + SITE_BASE (default https://listepo.dev/).
   domain: url.replace(/^https?:\/\//, '').replace(/\/$/, ''),
   url,
-  title: 'Ivan Tuhai — Founder & CTO of Pyrlyn',
+  title: 'Ivan Tuhai (listepo) — Founder & CTO of Pyrlyn | ketch, rtok, runa, cox',
   description:
-    'Ivan Tuhai (listepo) — engineer building software since 2009. Founder & CTO of Pyrlyn, Senior Frontend Developer at KSF Technologies AG. Projects: ketch, rtok, runa, cox.',
+    'Ivan Tuhai, founder & CTO of Pyrlyn: ketch (CLI package manager), rtok (AI agent context reducer), runa (local AI runner) and cox (terminal coding agent).',
 };
 
 export const person = {

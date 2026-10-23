@@ -11,7 +11,7 @@ export default defineConfig({
   compressHTML: true,
   site: siteUrl,
   base: siteBase === '/' ? '/' : siteBase.slice(0, -1),
-  // The print page is for the PDF build only, so it stays out of the sitemap.
-  integrations: [sitemap({ filter: (page) => !page.includes('/print') })],
+  // The print page is noindex and the 404 page is skipped by default, so neither is listed.
+  integrations: [sitemap({ filter: (page) => !/\/print\/?$/.test(page) })],
   vite: { plugins: [tailwindcss()] },
 });

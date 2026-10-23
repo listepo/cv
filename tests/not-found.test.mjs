@@ -19,7 +19,7 @@ test("robots.txt points at the sitemap and the build generates it without the pr
   const robots = readFileSync(new URL("../public/robots.txt", import.meta.url), "utf8");
   const config = readFileSync(new URL("../astro.config.mjs", import.meta.url), "utf8");
   assert.match(robots, /^Sitemap: https:\/\/listepo\.dev\/sitemap-index\.xml$/m);
-  assert.match(config, /sitemap\(\{ filter: \(page\) => !page\.includes\('\/print'\) \}\)/);
+  assert.match(config, /sitemap\(\{ filter: \(page\) => !\/\\\/print\\\/\?\$\/\.test\(page\) \}\)/);
 });
 
 test("inline links keep a 24px tap target and the top bar tightens below 360px", () => {
@@ -27,4 +27,10 @@ test("inline links keep a 24px tap target and the top bar tightens below 360px",
   const nav = readFileSync(new URL("../src/components/Nav.astro", import.meta.url), "utf8");
   assert.match(css, /\.link \{[^}]*min-height: 24px/);
   assert.match(nav, /@media \(max-width: 359px\)/);
+});
+
+test("nginx redirects the old /cv/ path to the root and keeps relative redirects", () => {
+  assert.match(nginx, /^[ \t]*absolute_redirect off;$/m);
+  assert.match(nginx, /location = \/cv \{ return 301 \/; \}/);
+  assert.match(nginx, /location \^~ \/cv\/ \{ return 301 \/; \}/);
 });

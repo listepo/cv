@@ -14,7 +14,9 @@ test("site url matches the default domain", () => {
   assert.equal(site.domain, "listepo.dev");
   assert.equal(site.url, "https://listepo.dev/");
   assert.ok(site.title.includes(person.name));
-  assert.ok(site.description.length > 0);
+  assert.equal(site.title, "Ivan Tuhai (listepo) — Founder & CTO of Pyrlyn | ketch, rtok, runa, cox");
+  assert.ok(site.description.length > 0 && site.description.length <= 160);
+  for (const name of ["ketch", "rtok", "runa", "cox"]) assert.ok(site.description.includes(name));
 });
 
 test("SITE_URL and SITE_BASE move the site to a custom domain root", () => {
