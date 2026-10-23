@@ -17,3 +17,11 @@ npm test
 `npm test` checks the data in `src/data/cv.ts` and `createNetwork` in `src/scripts/network-sim.ts`. Do not assert on canvas pixels, WebGL, or audio.
 
 Pull requests and pushes run `.github/workflows/ci.yml` (a SHA-pinned caller of `pyrlyn/ci`). Node comes from `mise.toml` (22, same major as the Docker image). The check job runs `npm ci`, `npm test`, and `npm run build`.
+
+jactionlint and hk are pinned in `mise.toml`. `.github/jactionlint.yaml` applies the default profile and the baseline `.github/jactionlint-baseline.json`. `hk.pkl` runs jactionlint as a pre-push hook:
+
+```sh
+mise x -- jactionlint                  # lint workflows, composite actions, dependabot.yml
+mise x -- jactionlint --baseline-write # refresh the baseline after fixing findings
+mise x -- hk install --mise            # install the pre-push hook once per clone
+```
