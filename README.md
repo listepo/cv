@@ -25,7 +25,8 @@ docker run -d --name listepo-cv -p 127.0.0.1:8081:80 listepo-cv   # http://local
 ```
 
 Build args: `SITE_URL`, `SITE_BASE` (`--build-arg SITE_BASE=/cv` to serve under a subpath),
-`NODE_VERSION` (22), `NGINX_VERSION` (`1.30-alpine`).
+`NODE_VERSION` (22), `NGINX_VERSION` (`1.30-alpine`), `GA_MEASUREMENT_ID`,
+`POSTHOG_KEY` (public `phc_...` project key; empty = PostHog off), `POSTHOG_HOST` (`https://eu.i.posthog.com`).
 
 - Content: `src/data/cv.ts`
 - Design system and tuning notes: [DESIGN.md](DESIGN.md)

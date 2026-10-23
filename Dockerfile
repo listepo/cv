@@ -20,7 +20,12 @@ COPY . .
 # Served at the domain root by default; set SITE_BASE for a subpath.
 ARG SITE_URL=https://listepo.dev
 ARG SITE_BASE=/
-ENV SITE_URL=${SITE_URL} SITE_BASE=${SITE_BASE}
+# Public GA4 ID; "off" disables gtag.
+ARG GA_MEASUREMENT_ID=G-J0GY03RN5H
+# Public PostHog project key (phc_...) and host; empty key disables PostHog.
+ARG POSTHOG_KEY=
+ARG POSTHOG_HOST=https://eu.i.posthog.com
+ENV SITE_URL=${SITE_URL} SITE_BASE=${SITE_BASE} GA_MEASUREMENT_ID=${GA_MEASUREMENT_ID} POSTHOG_KEY=${POSTHOG_KEY} POSTHOG_HOST=${POSTHOG_HOST}
 RUN npm run build && test -f dist/index.html && test -f dist/404.html && test -f dist/ivan-tuhai-cv.pdf
 
 FROM nginx:${NGINX_VERSION}

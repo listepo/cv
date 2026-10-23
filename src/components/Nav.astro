@@ -91,6 +91,10 @@ const items = [
   .progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; pointer-events: none; }
   .progress > span { display: block; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; }
   .topbar__list { display: flex; align-items: center; gap: var(--space-1); }
+  @media (max-width: 359px) {
+    .topbar__inner { gap: var(--space-2); }
+    .topbar__right, .topbar__list { gap: 0; }
+  }
   .nav__link {
     position: relative; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px;
     font-family: var(--font-mono); font-size: var(--text-sm); color: var(--muted);

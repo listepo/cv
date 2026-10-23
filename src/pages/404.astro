@@ -14,11 +14,11 @@ const home = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
   <main id="main">
     <section class="miss container-x" aria-labelledby="miss-title">
       <p class="miss__code" aria-hidden="true">404</p>
-      <div class="section-head">
+      <div class="section-head grid gap-3">
         <Prompt cmd="cd missing" />
         <h1 id="miss-title" class="section-title" data-glitch>Page not found</h1>
       </div>
-      <p class="section-lede">This path does not exist.</p>
+      <p class="max-w-[38rem] text-muted">This path does not exist.</p>
       <p class="miss__back">
         <a class="btn btn--primary" href={home}>
           <span class="btn__label" data-glitch>cd ~</span>

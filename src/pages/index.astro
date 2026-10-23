@@ -22,7 +22,7 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
 
     <!-- about -->
     <section id="about" class="section container-x" aria-labelledby="about-title">
-      <div class="section-head">
+      <div class="section-head grid gap-3">
         <Prompt num="01" cmd="cat about.md" />
         <h2 id="about-title" class="section-title" data-glitch>About</h2>
       </div>
@@ -48,10 +48,10 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
 
     <!-- experience -->
     <section id="experience" class="section container-x" aria-labelledby="exp-title">
-      <div class="section-head">
+      <div class="section-head grid gap-3">
         <Prompt num="02" cmd="git log --author=ivan --oneline" />
         <h2 id="exp-title" class="section-title" data-glitch>Experience</h2>
-        <p class="section-lede">Building software since 2009: from freelance and full-stack work to frontend tech lead and my own company.</p>
+        <p class="max-w-[38rem] text-muted">Building software since 2009: from freelance and full-stack work to frontend tech lead and my own company.</p>
       </div>
       <ol class="log pane">
         {experience.map((j) => (
@@ -81,10 +81,10 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
 
     <!-- projects -->
     <section id="projects" class="section container-x" aria-labelledby="projects-title">
-      <div class="section-head">
+      <div class="section-head grid gap-3">
         <Prompt num="03" cmd="ls -la ~/projects" />
         <h2 id="projects-title" class="section-title" data-glitch>Projects</h2>
-        <p class="section-lede">The main ones are Pyrlyn’s CLI and AI tools. Below are the rest of my open repositories. {projectsStatusNote}</p>
+        <p class="max-w-[38rem] text-muted">The main ones are Pyrlyn’s CLI and AI tools. Below are the rest of my open repositories. {projectsStatusNote}</p>
       </div>
 
       <ul class="featured" role="list">
@@ -127,10 +127,10 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
 
     <!-- contact -->
     <section id="contact" class="section container-x" aria-labelledby="contact-title">
-      <div class="section-head">
+      <div class="section-head grid gap-3">
         <Prompt num="04" cmd="cat contacts" />
         <h2 id="contact-title" class="section-title" data-glitch>Contact</h2>
-        <p class="section-lede">Open to offers. Email is the fastest way to reach me.</p>
+        <p class="max-w-[38rem] text-muted">Open to offers. Email is the fastest way to reach me.</p>
       </div>
       <ul class="contact pane" role="list">
         {links.map((l) => (
@@ -174,9 +174,9 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
   .kv dt { color: var(--fg); min-width: 12ch; }
 
   /* projects */
-  .featured { display: grid; gap: var(--space-4); margin-top: var(--space-8); }
-  @media (min-width: 768px) { .featured { grid-template-columns: repeat(2, 1fr); } }
-  .project { padding: var(--space-6); }
+  .featured { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); margin-top: var(--space-8); }
+  @media (min-width: 768px) { .featured { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .project { padding: var(--space-6); min-width: 0; }
   .project__head { display: flex; align-items: baseline; gap: var(--space-3); }
   .project__idx { font-size: var(--text-xs); color: var(--subtle); }
   .project__name { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.03em; }
@@ -240,15 +240,15 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
   }
 
   /* contact: list pane, two columns */
-  .contact { margin-top: var(--space-8); display: grid; overflow: hidden; }
-  @media (min-width: 768px) { .contact { grid-template-columns: 1fr 1fr; } .contact li:nth-child(odd) { border-right: 1px solid var(--line); } }
+  .contact { margin-top: var(--space-8); display: grid; grid-template-columns: minmax(0, 1fr); overflow: hidden; }
+  @media (min-width: 768px) { .contact { grid-template-columns: repeat(2, minmax(0, 1fr)); } .contact li:nth-child(odd) { border-right: 1px solid var(--line); } }
   .contact li { border-bottom: 1px solid var(--line); }
   .contact__row { display: flex; align-items: center; gap: var(--space-4); min-height: 60px; padding: 0 var(--space-6); transition: background-color var(--dur-base) var(--ease-out); }
   a.contact__row:hover { background: var(--accent-soft); }
   a.contact__row:focus-visible { outline-offset: -2px; border-radius: 0; }
   .contact__row--disabled { cursor: not-allowed; }
   .contact__key { min-width: 9ch; font-size: var(--text-xs); color: var(--subtle); }
-  .contact__val { font-size: var(--text-sm); color: var(--fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .contact__val { min-width: 0; font-size: var(--text-sm); color: var(--fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .contact__arrow { margin-left: auto; color: var(--muted); transition: color var(--dur-fast), transform var(--dur-base) var(--ease-out); }
   a.contact__row:hover .contact__arrow { color: var(--accent); transform: translate(2px, -2px); }
 
