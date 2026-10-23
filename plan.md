@@ -7,7 +7,6 @@ One-page personal CV site (Ivan Tuhai): Astro 5 static site + Tailwind 4 + OGL W
 | # | Status | Priority | Complexity | Readiness | Agent |
 | --- | --- | --- | --- | --- | --- |
 | T3 | todo | P3 | 1 | 0% | |
-| T4 | todo | P2 | 1 | 0% | |
 | T5 | todo | P3 | 2 | 0% | |
 | T6 | todo | P3 | 2 | 0% | |
 | T7 | todo | P2 | 1 | 0% | |
@@ -18,10 +17,6 @@ Audit note (2026-10-07): no secrets tracked, no unintended personal-data exposur
 ### T3. Debug glitch hook permanently disables glitching
 
 `src/scripts/glitch.ts:46-49`: `run(t, hold=true)` sets `busy = true` without the reset timeout, so any later scheduled `run()` is a no-op until reload. Done means: the hold path resets `busy` too.
-
-### T4. Security hardening: JSON-LD escaping + SHA-pinned CI actions
-
-`src/layouts/Base.astro:62` injects `JSON.stringify(jsonLd)` via `set:html` without escaping `<` — not exploitable today (all values hardcoded), but any future `</script>` value breaks out. `.github/workflows/deploy.yml:22,24,34` pins actions by tag, not commit SHA. Done means: `<` is escaped as `\u003c` before injection and the three actions are SHA-pinned (permissions are already minimal).
 
 ### T5. Deduplicate theme background and contact data
 

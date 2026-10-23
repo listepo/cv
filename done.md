@@ -29,3 +29,11 @@ The creator approved dependency updates after npm audit reported high and critic
 Execution plan: capture existing tests/build output; update package manifests and lockfile using npm; preserve HTML whitespace behavior; verify tests, build, package audit and site-specific PDF/docs/SEO checks. Update toolchain documentation. Rollback is a revert of this PR; no runtime data migration is involved.
 
 Validation: npm test (11 passing), npm run build (3 routes and a two-page PDF), npm audit (0 vulnerabilities). All routes and extracted HTML text match the Astro 5 baseline. Preserved HTML whitespace with compressHTML: true. Migration references: https://docs.astro.build/en/guides/upgrade-to/v6/ and https://docs.astro.build/en/guides/upgrade-to/v7/ (checked 2026-10-15).
+
+### T4. Security hardening: JSON-LD escaping + SHA-pinned CI actions
+
+Execution plan: add a script-termination regression for JSON-LD serialization; escape literal less-than characters before the raw script insertion; verify CI action pins (already SHA-pinned on current main); run npm tests and the build. Use JSON.stringify and built-in replacement; no matching shared helper or new dependency is needed.
+
+`src/layouts/Base.astro:62` injects `JSON.stringify(jsonLd)` via `set:html` without escaping `<` — not exploitable today (all values hardcoded), but any future `</script>` value breaks out. The sole reusable-workflow action in `.github/workflows/ci.yml` is already pinned by commit SHA. Done means: `<` is escaped as `\u003c` before injection and the existing CI SHA pin is verified (permissions are already minimal).
+
+Validation: the script-termination regression failed before escaping; all 16 tests and the Astro/PDF build pass. The sole CI reusable-workflow action was already SHA-pinned; no pin changes were needed. JSON round-trips preserve the original text.

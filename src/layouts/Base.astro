@@ -2,6 +2,7 @@
 import '../styles/fonts.css';
 import '../styles/global.css';
 import { site, person, projects } from '../data/cv';
+import { serializeJsonLd } from '../data/json-ld';
 // Public GA4 ID (same as pyrlyn landing); override with GA_MEASUREMENT_ID, or set it to "off" to disable.
 const gaRaw = (import.meta.env.GA_MEASUREMENT_ID ?? process.env.GA_MEASUREMENT_ID ?? '').trim() || 'G-J0GY03RN5H';
 const GA_MEASUREMENT_ID = /^G-[A-Z0-9]+$/.test(gaRaw) ? gaRaw : '';
@@ -106,7 +107,7 @@ const jsonLd = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={ogAlt} />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script type="application/ld+json" set:html={serializeJsonLd(jsonLd)} />
     {GA_MEASUREMENT_ID && (
       <>
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}></script>
