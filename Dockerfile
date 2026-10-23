@@ -21,7 +21,7 @@ COPY . .
 ARG SITE_URL=https://listepo.dev
 ARG SITE_BASE=/
 # Public GA4 ID; "off" disables gtag.
-ARG GA_MEASUREMENT_ID=G-61CRNDXXYK
+ARG GA_MEASUREMENT_ID=G-J0GY03RN5H
 ENV SITE_URL=${SITE_URL} SITE_BASE=${SITE_BASE} GA_MEASUREMENT_ID=${GA_MEASUREMENT_ID}
 RUN npm run build && test -f dist/index.html && test -f dist/404.html && test -f dist/ivan-tuhai-cv.pdf
 
