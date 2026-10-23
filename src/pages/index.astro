@@ -174,9 +174,9 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
   .kv dt { color: var(--fg); min-width: 12ch; }
 
   /* projects */
-  .featured { display: grid; gap: var(--space-4); margin-top: var(--space-8); }
-  @media (min-width: 768px) { .featured { grid-template-columns: repeat(2, 1fr); } }
-  .project { padding: var(--space-6); }
+  .featured { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); margin-top: var(--space-8); }
+  @media (min-width: 768px) { .featured { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .project { padding: var(--space-6); min-width: 0; }
   .project__head { display: flex; align-items: baseline; gap: var(--space-3); }
   .project__idx { font-size: var(--text-xs); color: var(--subtle); }
   .project__name { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.03em; }
@@ -240,15 +240,15 @@ const isLiteral = (v: string) => /^\d+$|^true$|^false$/.test(v);
   }
 
   /* contact: list pane, two columns */
-  .contact { margin-top: var(--space-8); display: grid; overflow: hidden; }
-  @media (min-width: 768px) { .contact { grid-template-columns: 1fr 1fr; } .contact li:nth-child(odd) { border-right: 1px solid var(--line); } }
+  .contact { margin-top: var(--space-8); display: grid; grid-template-columns: minmax(0, 1fr); overflow: hidden; }
+  @media (min-width: 768px) { .contact { grid-template-columns: repeat(2, minmax(0, 1fr)); } .contact li:nth-child(odd) { border-right: 1px solid var(--line); } }
   .contact li { border-bottom: 1px solid var(--line); }
   .contact__row { display: flex; align-items: center; gap: var(--space-4); min-height: 60px; padding: 0 var(--space-6); transition: background-color var(--dur-base) var(--ease-out); }
   a.contact__row:hover { background: var(--accent-soft); }
   a.contact__row:focus-visible { outline-offset: -2px; border-radius: 0; }
   .contact__row--disabled { cursor: not-allowed; }
   .contact__key { min-width: 9ch; font-size: var(--text-xs); color: var(--subtle); }
-  .contact__val { font-size: var(--text-sm); color: var(--fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .contact__val { min-width: 0; font-size: var(--text-sm); color: var(--fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .contact__arrow { margin-left: auto; color: var(--muted); transition: color var(--dur-fast), transform var(--dur-base) var(--ease-out); }
   a.contact__row:hover .contact__arrow { color: var(--accent); transform: translate(2px, -2px); }
 
