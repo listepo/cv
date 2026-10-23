@@ -6,8 +6,8 @@ import { serializeJsonLd } from '../data/json-ld';
 // Public GA4 ID (same as pyrlyn landing); override with GA_MEASUREMENT_ID, or set it to "off" to disable.
 const gaRaw = (import.meta.env.GA_MEASUREMENT_ID ?? process.env.GA_MEASUREMENT_ID ?? '').trim() || 'G-J0GY03RN5H';
 const GA_MEASUREMENT_ID = /^G-[A-Z0-9]+$/.test(gaRaw) ? gaRaw : '';
-// Public PostHog project key (phc_...); empty = PostHog off. Host defaults to the EU cloud.
-const phRaw = (import.meta.env.POSTHOG_KEY ?? process.env.POSTHOG_KEY ?? '').trim();
+// Public PostHog project key (phc_...); set to "off" to disable. Host defaults to the EU cloud.
+const phRaw = (import.meta.env.POSTHOG_KEY ?? process.env.POSTHOG_KEY ?? '').trim() || 'phc_oirHFL4DjcX7uyo2fmEaiXB3KA25Qyv8HoAbVEv32xkH';
 const POSTHOG_KEY = /^phc_[A-Za-z0-9]+$/.test(phRaw) ? phRaw : '';
 const POSTHOG_HOST = (import.meta.env.POSTHOG_HOST ?? process.env.POSTHOG_HOST ?? '').trim() || 'https://eu.i.posthog.com';
 
