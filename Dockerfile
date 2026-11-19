@@ -6,7 +6,9 @@
 ARG NODE_VERSION=22
 ARG NGINX_VERSION=1.30-alpine
 
-FROM node:${NODE_VERSION}-bookworm-slim AS build
+# The build stage only emits static files (HTML + PDF), so it runs on the native build platform:
+# Chromium crashes under amd64 emulation on Apple Silicon, which broke `--platform linux/amd64` builds.
+FROM --platform=$BUILDPLATFORM node:${NODE_VERSION}-bookworm-slim AS build
 # Debian's Chromium prints the PDF (scripts/build-pdf.mjs reads CHROME_PATH); CI=true makes a missing
 # or broken browser fail the build instead of silently skipping the PDF.
 RUN apt-get update \
