@@ -1,16 +1,14 @@
 name: ci
 
-# Thin caller of pyrlyn/ci. What runs is .github/infra.yml (Node from mise.toml,
+# Thin caller of the shared reusable workflow (moved from pyrlyn/ci to
+# pyrlyn-archive/ci-old). What runs is .github/infra.yml (Node from mise.toml,
 # then npm ci, tests, and the site + PDF build), plus the shared defaults
 # (actionlint, CodeQL, Semgrep, the .NET no-op) behind that workflow's gate.
-#
-# `push` is not limited to main: a workflow file that exists only on a pull
-# request head does not run for `pull_request` until it is on the default
-# branch. The push of this branch is the run that validates the file first.
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
   push:
+    branches: [main]
 
 permissions:
   contents: read
@@ -21,7 +19,7 @@ concurrency:
 
 jobs:
   ci:
-    uses: pyrlyn/ci/.github/workflows/ci.yml@6a0d3ef0dc39740c0e4770e4f31af5b4fdfc01f3 # main
+    uses: pyrlyn-archive/ci-old/.github/workflows/ci.yml@6a0d3ef0dc39740c0e4770e4f31af5b4fdfc01f3 # former pyrlyn/ci main
     permissions:
       contents: read
       security-events: write
